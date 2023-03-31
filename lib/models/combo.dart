@@ -40,7 +40,7 @@ class Combo {
           : null,
       lastUpdatedBy: json['LastUpdatedBy'] as int?,
       name: json['Name'] as String,
-      description: json['Description'] as String,
+      description: json['Description'] as String?,
       price: json['Price'] as double,
       gallery: json['Gallery'] as int?,
       thumbnail: json['Thumbnail'] as int?,

@@ -8,7 +8,7 @@ import 'package:flutter_up/widgets/up_checkbox.dart';
 import 'package:flutter_up/widgets/up_text.dart';
 import 'package:flutter_up/widgets/up_textfield.dart';
 import 'package:shop/admin/add_edit_addons.dart';
-import 'package:shop/admin/add_edit_attribute_widget.dart';
+import 'package:shop/admin/add_edit_filter_widget.dart';
 import 'package:shop/admin/add_edit_keyword_widget.dart';
 import 'package:shop/admin/add_edit_product_attributes.dart';
 import 'package:shop/admin/admin_product_variations.dart';
@@ -16,7 +16,6 @@ import 'package:shop/date_time_picker.dart';
 import 'package:shop/models/add_on.dart';
 import 'package:shop/models/collection.dart';
 import 'package:shop/models/product.dart';
-
 import 'package:shop/services/add_edit_product_service/add_edit_product_service.dart';
 import 'package:shop/widgets/add_media_widget.dart';
 import 'package:shop/widgets/gallery_dropdown.dart';
@@ -24,11 +23,13 @@ import 'package:shop/widgets/gallery_dropdown.dart';
 class AdminProduct extends StatefulWidget {
   final Product? currentProduct;
   final Collection collection;
-  const AdminProduct({
-    Key? key,
-    this.currentProduct,
-    required this.collection,
-  }) : super(key: key);
+  bool isReset;
+  AdminProduct(
+      {Key? key,
+      this.currentProduct,
+      required this.collection,
+      this.isReset = false})
+      : super(key: key);
 
   @override
   State<AdminProduct> createState() => _AdminProductState();
@@ -49,7 +50,7 @@ class _AdminProductState extends State<AdminProduct> {
   Map<String, dynamic> menuOptions = {};
   List<int> keywords = [];
   bool isVariedProduct = false;
-  Map<String, int> options = {};
+  Map<String, dynamic> options = {};
   Map<String, dynamic> meta = {};
   int? selectedMedia;
   List<AddOn> addons = [];
@@ -58,6 +59,15 @@ class _AdminProductState extends State<AdminProduct> {
   bool isProductDetailEnabled = false;
 
   _initializeFields() {
+    Map<String, int> newOptions = {};
+    if (currentProduct!.options != null &&
+        currentProduct!.options!.isNotEmpty) {
+      currentProduct!.options!.forEach((key, value) {
+        if (value != null && key.length == 1) {
+          newOptions[key] = value;
+        }
+      });
+    }
     _nameController.text = currentProduct!.name;
     _descriptionController.text = currentProduct!.description ?? "";
     isVariedProduct = currentProduct!.isVariedProduct;
@@ -77,7 +87,7 @@ class _AdminProductState extends State<AdminProduct> {
     gallery = currentProduct!.gallery;
     thumbnail = currentProduct!.thumbnail;
     keywords = currentProduct!.keywords ?? [];
-    options = currentProduct!.options ?? {};
+    options = newOptions;
     meta = currentProduct!.meta ?? {};
     selectedMedia = currentProduct!.thumbnail;
 
@@ -217,26 +227,31 @@ class _AdminProductState extends State<AdminProduct> {
                 ),
               ),
             ),
-            GestureDetector(
-                onTap: (() {
-                  if (isProductDetailEnabled) {
-                    view = 2;
-                    setState(() {});
-                  }
-                }),
-                child: Container(
-                    color: view == 2
-                        ? UpConfig.of(context).theme.primaryColor[100]
-                        : Colors.transparent,
-                    child: ListTile(
-                      title: UpText(
-                        style: UpStyle(
-                            textColor: isProductDetailEnabled
-                                ? UpConfig.of(context).theme.primaryColor[700]
-                                : Colors.grey[700]),
-                        "Product Attributes",
-                      ),
-                    ))),
+            Visibility(
+              visible: currentProduct != null &&
+                  currentProduct!.isVariedProduct &&
+                  currentProduct!.id != null,
+              child: GestureDetector(
+                  onTap: (() {
+                    if (isProductDetailEnabled) {
+                      view = 2;
+                      setState(() {});
+                    }
+                  }),
+                  child: Container(
+                      color: view == 2
+                          ? UpConfig.of(context).theme.primaryColor[100]
+                          : Colors.transparent,
+                      child: ListTile(
+                        title: UpText(
+                          style: UpStyle(
+                              textColor: isProductDetailEnabled
+                                  ? UpConfig.of(context).theme.primaryColor[700]
+                                  : Colors.grey[700]),
+                          "Product Attributes",
+                        ),
+                      ))),
+            ),
             Visibility(
               visible: currentProduct != null &&
                   currentProduct!.isVariedProduct &&
@@ -342,12 +357,12 @@ class _AdminProductState extends State<AdminProduct> {
   Widget _productFiltersView() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: AddEditAttributesWidget(
+      child: AddEditFiltersWidget(
         onChange: (newOptions) {
           options = newOptions;
           addEditProduct();
         },
-        options: currentProduct!.options,
+        options: options,
       ),
     );
   }
@@ -531,11 +546,14 @@ class _AdminProductState extends State<AdminProduct> {
 
   @override
   Widget build(BuildContext context) {
-    // if (widget.currentProduct == null) {
-    //   view = 1;
-    //   clearFields();
-    // }
+    if (widget.isReset) {
+      view = 1;
+      clearFields();
+      widget.isReset = false;
+    }
+
     return SizedBox(
+      key: GlobalKey(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

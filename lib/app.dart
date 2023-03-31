@@ -10,6 +10,7 @@ import 'package:flutter_up/up_app.dart';
 import 'package:shop/constants.dart';
 
 import 'package:shop/pages/authentication/loginsignup.dart';
+import 'package:shop/pages/product/product.dart';
 import 'package:shop/pages/products/products.dart';
 import 'package:shop/pages/simple_home/simple_homepage.dart';
 import 'package:shop/pages/store_dependant_page.dart';
@@ -64,16 +65,16 @@ class ShopApp extends StatelessWidget {
                 //     page: CartPage(),
                 //   ),
                 // ),
-                // UpRoute(
-                //   name: Routes.product,
-                //   path: Routes.product,
-                //   pageBuilder: (BuildContext context, UpRouterState state) =>
-                //       StoreDependantPage(
-                //     page: ProductPage(
-                //       queryParams: state.queryParams,
-                //     ),
-                //   ),
-                // ),
+                UpRoute(
+                  name: Routes.product,
+                  path: Routes.product,
+                  pageBuilder: (BuildContext context, UpRouterState state) =>
+                      StoreDependantPage(
+                    page: ProductPage(
+                      queryParams: state.queryParams,
+                    ),
+                  ),
+                ),
                 UpRoute(
                   name: Routes.products,
                   path: Routes.products,

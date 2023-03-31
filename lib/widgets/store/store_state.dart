@@ -11,7 +11,7 @@ class StoreState {
   final List<Attribute>? attributes;
   final List<AttributeValue>? attributeValues;
   final List<Gallery>? gallery;
-  final List<Restaurant>? restaurants;
+
   final List<ProductCombo>? productCombos;
   final List<Combo>? combos;
   final List<AddOn>? addOns;
@@ -32,7 +32,6 @@ class StoreState {
     this.productCombos,
     this.addOns,
     this.productAttributes,
-    this.restaurants,
   );
 
   get productOptionsValuesMod => null;

@@ -46,7 +46,7 @@ class ProductService {
               selectedVariationsValues[VariationTypes.size.index]!.join(",");
           debugPrint(sizes);
           // jsonQuery["sizes"] = "ARRAY[$sizes]";
-          filters.add('"Size": "{$sizes}"');
+          filters.add('"1": "{$sizes}"');
         }
         if (selectedVariationsValues[VariationTypes.color.index] != null &&
             selectedVariationsValues[VariationTypes.color.index]!.isNotEmpty) {
@@ -55,7 +55,7 @@ class ProductService {
               selectedVariationsValues[VariationTypes.color.index]!.join(",");
           debugPrint(colors);
           // jsonQuery["colors"] = "ARRAY[$colors]";
-          filters.add('"Color": "{$colors}"');
+          filters.add('"2": "{$colors}"');
         }
       }
       if (filters.isNotEmpty) {

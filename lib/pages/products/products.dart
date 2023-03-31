@@ -5,6 +5,7 @@ import 'package:shop/models/product.dart';
 import 'package:shop/widgets/appbar/custom_appbar.dart';
 import 'package:shop/widgets/drawer/drawer.dart';
 import 'package:shop/widgets/error/error.dart';
+import 'package:shop/widgets/filters/filter.dart';
 import 'package:shop/widgets/header/header.dart';
 import 'package:shop/widgets/keywords/keywords.dart';
 import 'package:shop/widgets/products/products_list.dart';
@@ -97,17 +98,18 @@ class _AllProductsState extends State<Products> {
                         UpOrientationalColumnRow(
                           widths: const [200, -1],
                           children: [
-                            // Center(
-                            //   child: Container(
-                            //     // height: MediaQuery.of(context).size.height,
-                            //     color: Colors.grey[100],
-                            //     child: FilterPage(
-                            //       collection: collection,
-                            //       change: (v) => change(0, v),
-                            //     ),
-                            //   ),
-                            // ),
+                            Center(
+                              child: Container(
+                                // height: MediaQuery.of(context).size.height,
+                                color: Colors.grey[100],
+                                child: FilterPage(
+                                  collection: collection,
+                                  change: (v) => change(0, v),
+                                ),
+                              ),
+                            ),
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),

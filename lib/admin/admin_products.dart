@@ -46,6 +46,7 @@ class _AdminProductsState extends State<AdminProducts> {
   int view = 1;
   Product? currentProduct;
   bool isExpanded = false;
+  bool isReset = false;
   @override
   void initState() {
     super.initState();
@@ -81,6 +82,7 @@ class _AdminProductsState extends State<AdminProducts> {
                   // currentParent = "";
                   selectedMedia = null;
                   view = 1;
+                  isReset = false;
                   setState(() {});
                 }),
                 child: Container(
@@ -151,7 +153,7 @@ class _AdminProductsState extends State<AdminProducts> {
                                       onTap: () {
                                         currentProduct = null;
                                         view = 2;
-
+                                        isReset = true;
                                         isExpanded = false;
                                         setState(() {});
                                       },
@@ -171,6 +173,7 @@ class _AdminProductsState extends State<AdminProducts> {
                                         isExpanded = false;
 
                                         view = 3;
+                                        isReset = false;
                                         setState(() {});
                                       }),
                                       child: Container(
@@ -202,6 +205,7 @@ class _AdminProductsState extends State<AdminProducts> {
   Widget rightView() {
     if (view == 2) {
       return AdminProduct(
+        isReset: isReset,
         collection: selectedCollection,
       );
     } else if (view == 3) {
