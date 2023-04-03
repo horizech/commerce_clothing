@@ -136,16 +136,27 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
   List<int> disabledColors = [];
   int maxItems = -1;
   List<int> mediaList = [];
+  int sizeAttributeId = 0;
+  int colorAttributeId = 0;
+  int? selectedVariationId;
+  int defaultValue = 1;
+
+  static int convertToInt(dynamic a) {
+    return int.parse(a.toString());
+  }
 
   onVariationChange(int key, List<int> values) {
     if (key == VariationTypes.color.index) {
       selectedVariationsValues[key] = values[0];
 
-      List<dynamic> allowedSizes = widget.productVariations!
-          .where((element) => values.contains(element.options["2"]))
+      List<int> allowedSizes = widget.productVariations!
+          .where((element) =>
+              values.contains(element.options["$colorAttributeId"]) &&
+              element.options["$sizeAttributeId"] != null)
           .map(
-            (e) => e.options["1"],
+            (e) => e.options["$sizeAttributeId"]!,
           )
+          .map((e) => convertToInt(e))
           .toSet()
           .toList();
 
@@ -168,11 +179,14 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
     if (key == VariationTypes.size.index) {
       selectedVariationsValues[key] = values[0];
 
-      List<dynamic> allowedColors = widget.productVariations!
-          .where((element) => values.contains(element.options["1"]!))
+      List<int> allowedColors = widget.productVariations!
+          .where((element) =>
+              values.contains(element.options["$sizeAttributeId"]) &&
+              element.options["$colorAttributeId"] != null)
           .map(
-            (e) => e.options["2"]!,
+            (e) => e.options["$colorAttributeId"]!,
           )
+          .map((e) => convertToInt(e))
           .toSet()
           .toList();
 
@@ -195,23 +209,24 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
         selectedVariationsValues[VariationTypes.color.index] != 0 &&
         selectedVariationsValues[VariationTypes.size.index] != 0) {
       maxItems = 0;
-      if (widget.productVariations!.any((v) => (v.options["Color"] ==
-              selectedVariationsValues[VariationTypes.color.index] &&
-          v.options["Size"] ==
-              selectedVariationsValues[VariationTypes.size.index]))) {
-        int selectedProductVariationId = widget.productVariations!
-            .firstWhere((v) => (v.options["Color"] ==
+      if (widget.productVariations!.any((v) =>
+          (v.options["$colorAttributeId"] ==
+                  selectedVariationsValues[VariationTypes.color.index] &&
+              v.options["$sizeAttributeId"] ==
+                  selectedVariationsValues[VariationTypes.size.index]))) {
+        selectedVariationId = widget.productVariations!
+            .firstWhere((v) => (v.options["$colorAttributeId"] ==
                     selectedVariationsValues[VariationTypes.color.index] &&
-                v.options["Size"] ==
+                v.options["$sizeAttributeId"] ==
                     selectedVariationsValues[VariationTypes.size.index]))
             .id!;
         if (widget.productVariations != null &&
             widget.productVariations!.isNotEmpty) {
           gallery = widget.productVariations!
               .firstWhere(
-                (v) => (v.options["Color"] ==
+                (v) => (v.options["$colorAttributeId"] ==
                         selectedVariationsValues[VariationTypes.color.index] &&
-                    v.options["Size"] ==
+                    v.options["$sizeAttributeId"] ==
                         selectedVariationsValues[VariationTypes.size.index]),
               )
               .gallery;
@@ -220,18 +235,17 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
         mainMediaUpdate = true;
         if (widget.stock != null && widget.stock!.isNotEmpty) {
           if (widget.stock!
-              .any((s) => s.productVariation == selectedProductVariationId)) {
+              .any((s) => s.productVariation == selectedVariationId)) {
             maxItems = widget.stock!
-                .firstWhere(
-                    (s) => s.productVariation == selectedProductVariationId)
+                .firstWhere((s) => s.productVariation == selectedVariationId)
                 .quantity;
+            defaultValue = 1;
+            quantity = 1;
           }
         }
         mainMediaUpdate = true;
-        // maxItems = widget.productVariations!
-        //         .firstWhere((s) => s.id == selectedProductVariationId)
-        //         .quantity ??
-        // 0;
+
+        0;
         mediaList = [];
       } else {
         maxItems = -1;
@@ -239,10 +253,6 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
         gallery = widget.product.gallery;
       }
     }
-
-    debugPrint(maxItems.toString());
-
-    // debugPrint("you clicked on $values for $key");
   }
 
   onQuantityChange(int count) {
@@ -254,81 +264,82 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
     int totalStock = 0;
     List<dynamic> sizes = [];
     List<dynamic> colors = [];
-    // if (!widget.product.isVariedProduct && maxItems == -1) {
-    //   if (widget.stock != null && widget.stock!.isNotEmpty) {
-    //     maxItems = widget.stock!.first.quantity;
-    //   }
-    // } else {}
-
-    if (widget.productVariations != null &&
-        widget.productVariations!.isNotEmpty &&
-        maxItems == -1) {
-      for (var element in widget.productVariations!) {
-        debugPrint(element.options["1"].toString());
-      }
-
-      sizes =
-          widget.productVariations!.map((e) => e.options["1"]).toSet().toList();
-
-      colors = widget.productVariations!
-          .map((e) => e.options["2"])
-          .where((element) => element > 0)
-          .toSet()
-          .toList();
-
-      //   // for (int i = 0; i < widget.productVariations!.length; i++) {
-      //   //   totalStock += widget.productVariations![i].quantity ?? 0;
-      //   // }
-      //   maxItems = -1;
-
-    }
-    if (gallery == 0) {
-      gallery = widget.product.gallery;
-    }
-
-    if (variationControllers.isEmpty) {
-      for (var element in VariationTypes.values) {
-        variationControllers[element.index] = VariationController();
-      }
-    }
     try {
       return BlocConsumer<StoreCubit, StoreState>(
         listener: (context, state) {},
         builder: (context, state) {
-          //All sizes get
-          int? sizeOption = state.attributes!
-              .firstWhere((element) => element.name == "Size")
-              .id;
-          List<AttributeValue> allSizes = state.attributeValues!
-              .where((e) => e.attribute == sizeOption)
-              .toList();
-
-          //All colors get
-          int? colorOption = state.attributes!
-              .firstWhere((element) => element.name == "Color")
-              .id;
-          List<AttributeValue> allColors = state.attributeValues!
-              .where((e) => e.attribute == colorOption)
-              .toList();
-
-          if (colorVariation.isEmpty && sizeVariation.isEmpty) {
-            try {
-              //variation sizes list
-              for (int i = 0; i < sizes.length; i++) {
-                sizeVariation.add(
-                    allSizes.where((element) => element.id == sizes[i]).first);
-              }
-              //variation color list
-
-              for (int i = 0; i < colors.length; i++) {
-                colorVariation.add(allColors
-                    .where((element) => element.id == colors[i])
-                    .first);
-              }
-            } catch (e) {
-              debugPrint(e.toString());
+          if (state.attributes != null && state.attributes!.isNotEmpty) {
+            if (state.attributes!
+                .any((element) => element.name.toLowerCase() == "size")) {
+              sizeAttributeId = state.attributes!
+                  .firstWhere((element) => element.name == "Size")
+                  .id!;
+            }
+            if (state.attributes!
+                .any((element) => element.name.toLowerCase() == "color")) {
+              colorAttributeId = state.attributes!
+                  .firstWhere((element) => element.name == "Color")
+                  .id!;
             }
           }
+
+          if (widget.productVariations != null &&
+              widget.productVariations!.isNotEmpty &&
+              maxItems == -1 &&
+              sizes.isEmpty &&
+              colors.isEmpty) {
+            sizes = widget.productVariations!
+                .map((e) => e.options["$sizeAttributeId"])
+                .toSet()
+                .toList();
+
+            colors = widget.productVariations!
+                .map((e) => e.options["$colorAttributeId"])
+                .where((element) => element > 0)
+                .toSet()
+                .toList();
+          }
+          if (state.attributeValues != null &&
+              state.attributeValues!.isNotEmpty) {
+            List<AttributeValue> allSizes = state.attributeValues!
+                .where((e) => e.attribute == sizeAttributeId)
+                .toList();
+
+            List<AttributeValue> allColors = state.attributeValues!
+                .where((e) => e.attribute == colorAttributeId)
+                .toList();
+
+            if (colorVariation.isEmpty && sizeVariation.isEmpty) {
+              try {
+                //variation sizes list
+                for (int i = 0; i < sizes.length; i++) {
+                  sizeVariation.add(allSizes
+                      .where((element) => element.id == sizes[i])
+                      .first);
+                }
+                //variation color list
+
+                for (int i = 0; i < colors.length; i++) {
+                  colorVariation.add(allColors
+                      .where((element) => element.id == colors[i])
+                      .first);
+                }
+              } catch (e) {
+                debugPrint(e.toString());
+              }
+            }
+          }
+
+          if (gallery == 0) {
+            gallery = widget.product.gallery;
+          }
+
+          if (variationControllers.isEmpty) {
+            for (var element in VariationTypes.values) {
+              variationControllers[element.index] = VariationController();
+            }
+          }
+
           if (mediaList.isEmpty) {
             mediaList =
                 state.gallery!.firstWhere((m) => m.id == gallery).mediaList;
@@ -423,6 +434,7 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                       ? Row(
                                           children: [
                                             Counter(
+                                              defaultValue: defaultValue,
                                               onChange: onQuantityChange,
                                               maxItems: maxItems,
                                             ),
@@ -446,9 +458,7 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                       if (widget.product.isVariedProduct) {
                                         if (quantity > 0 &&
                                             quantity <= maxItems &&
-                                            (selectedVariationsValues.values
-                                                .any((element) =>
-                                                    element > 0))) {
+                                            selectedVariationId != null) {
                                           SnackBar snackBar = SnackBar(
                                             content: Text(
                                                 '$quantity products added to cart'),
@@ -461,8 +471,17 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                               context.read<CartCubit>();
                                           CartItem item = CartItem(
                                               product: widget.product,
-                                              // selectedVariation:
-                                              //     ,
+                                              selectedVariation: widget
+                                                              .productVariations !=
+                                                          null &&
+                                                      widget.productVariations!
+                                                          .isNotEmpty
+                                                  ? widget.productVariations!
+                                                      .where((element) =>
+                                                          element.id ==
+                                                          selectedVariationId)
+                                                      .first
+                                                  : null,
                                               quantity: quantity);
                                           cubit.addToCart(item);
                                         } else {
@@ -489,8 +508,7 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                               context.read<CartCubit>();
                                           CartItem item = CartItem(
                                               product: widget.product,
-                                              // selectedVariationsValues:
-                                              //     selectedVariationsValues,
+                                              selectedVariation: null,
                                               quantity: quantity);
                                           cubit.addToCart(item);
                                         } else {

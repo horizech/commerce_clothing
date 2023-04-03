@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop/models/product.dart';
+import 'package:shop/models/product_variation.dart';
 
 class PriceWidget extends StatelessWidget {
   final double? price;
@@ -85,14 +86,33 @@ getDiscountPercentage(double? price, double? discountPrice) {
   return percentage.ceilToDouble();
 }
 
-getPrice(Product product) {
+getPrice({Product? product, ProductVariation? productVariation}) {
   double? price = 0;
-  bool isDisocunt =
-      checkDisocunt(product.discountStartDate, product.discountEndDate);
+  bool isDisocunt = false;
+  if (productVariation != null) {
+    isDisocunt = checkDisocunt(
+      productVariation.discountStartDate,
+      productVariation.discountEndDate,
+    );
+  } else if (product != null) {
+    isDisocunt = checkDisocunt(
+      product.discountStartDate,
+      product.discountEndDate,
+    );
+  }
+
   if (isDisocunt) {
-    price = product.discounPrice;
+    if (productVariation != null && productVariation.discounPrice != null) {
+      price = productVariation.discounPrice;
+    } else if (product != null && product.discounPrice != null) {
+      price = product.discounPrice;
+    }
   } else {
-    price = product.price;
+    if (productVariation != null && productVariation.price != null) {
+      price = productVariation.price;
+    } else if (product != null && product.price != null) {
+      price = product.price;
+    }
   }
   return price;
 }

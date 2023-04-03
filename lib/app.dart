@@ -10,6 +10,10 @@ import 'package:flutter_up/up_app.dart';
 import 'package:shop/constants.dart';
 
 import 'package:shop/pages/authentication/loginsignup.dart';
+import 'package:shop/pages/cart/cart.dart';
+import 'package:shop/pages/payment/payment.dart';
+import 'package:shop/pages/payment_method/card_payment_page.dart';
+import 'package:shop/pages/payment_method/payment_method_page.dart';
 import 'package:shop/pages/product/product.dart';
 import 'package:shop/pages/products/products.dart';
 import 'package:shop/pages/simple_home/simple_homepage.dart';
@@ -57,14 +61,14 @@ class ShopApp extends StatelessWidget {
                     page: SimpleHomePage(),
                   ),
                 ),
-                // UpRoute(
-                //   name: Routes.cart,
-                //   path: Routes.cart,
-                //   pageBuilder: (BuildContext context, UpRouterState state) =>
-                //       StoreDependantPage(
-                //     page: CartPage(),
-                //   ),
-                // ),
+                UpRoute(
+                  name: Routes.cart,
+                  path: Routes.cart,
+                  pageBuilder: (BuildContext context, UpRouterState state) =>
+                      StoreDependantPage(
+                    page: CartPage(),
+                  ),
+                ),
                 UpRoute(
                   name: Routes.product,
                   path: Routes.product,
@@ -85,30 +89,30 @@ class ShopApp extends StatelessWidget {
                     ),
                   ),
                 ),
-                // UpRoute(
-                //   path: Routes.payment,
-                //   name: Routes.payment,
-                //   pageBuilder: (BuildContext context, UpRouterState state) =>
-                //       Apiraiser.authentication.isSignedIn()
-                //           ? const StoreDependantPage(
-                //               page: PaymentPage(),
-                //             )
-                //           : const PaymentPage(),
-                // ),
-                // UpRoute(
-                //   path: PaymentMethodsPage.routeName,
-                //   name: PaymentMethodsPage.routeName,
-                //   pageBuilder: (BuildContext context, UpRouterState state) =>
-                //       const StoreDependantPage(
-                //     page: PaymentMethodsPage(),
-                //   ),
-                // ),
-                // UpRoute(
-                //   path: CardPaymentPage.routeName,
-                //   name: CardPaymentPage.routeName,
-                //   pageBuilder: (BuildContext context, UpRouterState state) =>
-                //       const CardPaymentPage(),
-                // ),
+                UpRoute(
+                  path: Routes.payment,
+                  name: Routes.payment,
+                  pageBuilder: (BuildContext context, UpRouterState state) =>
+                      Apiraiser.authentication.isSignedIn()
+                          ? const StoreDependantPage(
+                              page: PaymentPage(),
+                            )
+                          : const PaymentPage(),
+                ),
+                UpRoute(
+                  path: Routes.paymentMethod,
+                  name: Routes.paymentMethod,
+                  pageBuilder: (BuildContext context, UpRouterState state) =>
+                      const StoreDependantPage(
+                    page: PaymentMethodsPage(),
+                  ),
+                ),
+                UpRoute(
+                  path: Routes.cardPayment,
+                  name: Routes.cardPayment,
+                  pageBuilder: (BuildContext context, UpRouterState state) =>
+                      const CardPaymentPage(),
+                ),
               ]),
         ),
       ),

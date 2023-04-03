@@ -6,15 +6,17 @@ import 'package:shop/widgets/keywords/keywords_service.dart';
 import 'package:shop/widgets/store/store_cubit.dart';
 
 class Keywords extends StatefulWidget {
-  final int? categoryId;
+  final int? collection;
   final Function? onChange;
   final int? selectedKeywordId;
+  final List<int>? keywordsList;
 
   const Keywords({
     Key? key,
     this.onChange,
     this.selectedKeywordId,
-    this.categoryId,
+    this.collection,
+    this.keywordsList,
   }) : super(key: key);
 
   @override
@@ -25,13 +27,34 @@ class _KeywordsState extends State<Keywords> {
   List<int> keywordsList = [];
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.keywordsList != null && widget.keywordsList!.isNotEmpty) {
+      keywordsList = widget.keywordsList ?? [];
+    }
+  }
+
+  onChange(int slectedKeyword) {
+    if (widget.onChange != null) {
+      widget.onChange!(
+        slectedKeyword,
+        keywordsList,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (keywordsList.isNotEmpty) {
+    if (widget.keywordsList != null && widget.keywordsList!.isNotEmpty) {
       return _keywordsWrap(
-          context, widget.onChange, widget.selectedKeywordId, keywordsList);
+        context,
+        (slectedKeyword) => onChange(slectedKeyword),
+        widget.selectedKeywordId,
+        keywordsList,
+      );
     }
     return FutureBuilder<List<int>>(
-      future: KeywordsService.getKeywordsList(widget.categoryId),
+      future: KeywordsService.getKeywordsList(widget.collection),
       builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Container(
@@ -44,7 +67,10 @@ class _KeywordsState extends State<Keywords> {
         keywordsList = snapshot.data ?? [];
         if (keywordsList != [] && keywordsList.isNotEmpty) {
           return _keywordsWrap(
-              context, widget.onChange, widget.selectedKeywordId, keywordsList);
+              context,
+              (slectedKeyword) => onChange(slectedKeyword),
+              widget.selectedKeywordId,
+              keywordsList);
         }
         return const Text("");
       },

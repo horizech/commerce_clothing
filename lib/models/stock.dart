@@ -35,7 +35,7 @@ class Stock extends Equatable {
             : null,
         json['LastUpdatedBy'] as int?,
         json['Product'] as int,
-        json['ProductVariation'] as int?,
+        json['Variation'] as int?,
         json['Quantity'] as int,
       );
       return stock;
@@ -52,7 +52,7 @@ class Stock extends Equatable {
         'LastUpdatedOn': instance.lastUpdatedOn,
         'LastUpdatedBy': instance.lastUpdatedBy,
         'Product': instance.product,
-        'ProductVariation': instance.productVariation,
+        'Variation': instance.productVariation,
         'Quantity': instance.quantity,
       };
 

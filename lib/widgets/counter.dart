@@ -21,6 +21,11 @@ class Counter extends StatefulWidget {
 }
 
 class _CounterState extends State<Counter> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void _increment() {
     if (widget.defaultValue < widget.maxItems! ||
         widget.defaultValue > widget.maxItems!) {

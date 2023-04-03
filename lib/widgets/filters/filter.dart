@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_up/widgets/up_circualar_progress.dart';
+import 'package:flutter_up/widgets/up_button.dart';
 import 'package:shop/models/attribute.dart';
 import 'package:shop/models/attribute_value.dart';
 import 'package:shop/services/attribute_service.dart';
@@ -14,9 +14,11 @@ import 'package:shop/widgets/variations/variation_types.dart';
 class FilterPage extends StatefulWidget {
   final int? collection;
   final Function? change;
+  final List<dynamic> attributeValueList;
   const FilterPage({
     Key? key,
     this.collection,
+    required this.attributeValueList,
     this.change,
   }) : super(key: key);
 
@@ -34,8 +36,10 @@ class _FilterPageState extends State<FilterPage> {
   @override
   void initState() {
     super.initState();
-    if (attributeValueList.isEmpty) {
+    if (widget.attributeValueList.isEmpty) {
       getFilters();
+    } else {
+      attributeValueList = widget.attributeValueList;
     }
   }
 
@@ -100,7 +104,11 @@ class _FilterPageState extends State<FilterPage> {
                 child: Column(
                   children: [
                     VariationFilter(
-                      change: widget.change,
+                      change: (selectedVariation) {
+                        if (widget.change != null) {
+                          widget.change!(selectedVariation, attributeValueList);
+                        }
+                      },
                       sizeVariations: sizeVariations,
                       colorVariations: colorVariations,
                     ),
@@ -109,7 +117,11 @@ class _FilterPageState extends State<FilterPage> {
               );
             },
           )
-        : const UpCircularProgress();
+        : const SizedBox(
+            width: 200,
+            height: 10,
+            child: SizedBox(),
+          );
   }
 }
 
@@ -216,8 +228,10 @@ class _VariationFilterState extends State<VariationFilter> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                  onPressed: onChange, child: const Text("Apply Filter")),
+              child: UpButton(
+                onPressed: onChange,
+                text: "Apply Filter",
+              ),
             ),
           ],
         )

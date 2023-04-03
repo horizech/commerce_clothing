@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_up/widgets/up_orientational_column_row.dart';
+import 'package:shop/models/collection.dart';
 import 'package:shop/models/product.dart';
 import 'package:shop/widgets/appbar/custom_appbar.dart';
 import 'package:shop/widgets/drawer/drawer.dart';
@@ -28,14 +29,20 @@ class _AllProductsState extends State<Products> {
   Map<int, List<int>> selectedVariationsValues = {};
   List<Product>? filteredProducts;
   List<Product>? products;
+  List<Collection> stateCollections = [];
+  List<int> keywordsList = [];
+  List<dynamic> attributeValueList = [];
 
-  change(int? id, Map<int, List<int>>? s) {
-    setState(() {
+  change(int? id, Map<int, List<int>>? s, List<int> k, List<dynamic> a) {
+    if (id != null) {
       selectedKeywordId = id;
-      selectedVariationsValues = s ?? {};
-      // filteredProducts!= filteredProducts(
-      //     products, selectedVariationsValues, selectedKeywordId);
-    });
+      keywordsList = k;
+    }
+    if (s != null && s.isNotEmpty) {
+      attributeValueList = a;
+      selectedVariationsValues = s;
+    }
+    setState(() {});
   }
 
   @override
@@ -92,30 +99,53 @@ class _AllProductsState extends State<Products> {
                     }
 
                     debugPrint(collections.toString());
+
+                    if (stateCollections.isEmpty) {
+                      if (state.collections != null &&
+                          state.collections!.isNotEmpty) {
+                        stateCollections = state.collections!.toList();
+                      }
+                    }
+
                     return Column(
                       children: [
                         const HeaderWidget(),
                         UpOrientationalColumnRow(
                           widths: const [200, -1],
                           children: [
-                            Center(
-                              child: Container(
-                                // height: MediaQuery.of(context).size.height,
-                                color: Colors.grey[100],
-                                child: FilterPage(
-                                  collection: collection,
-                                  change: (v) => change(0, v),
-                                ),
-                              ),
-                            ),
+                            stateCollections.any(
+                              (element) =>
+                                  element.id == collection &&
+                                  element.parent != null,
+                            )
+                                ? Center(
+                                    child: Container(
+                                      color: Colors.grey[100],
+                                      child: FilterPage(
+                                        attributeValueList: attributeValueList,
+                                        collection: collection,
+                                        change: (v, a) => change(
+                                            selectedKeywordId,
+                                            v,
+                                            keywordsList,
+                                            a),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Keywords(
-                                    categoryId: collection,
-                                    onChange: (k) => change(k, {}),
+                                    collection: collection,
+                                    keywordsList: keywordsList,
+                                    onChange: (k, list) => change(
+                                        k,
+                                        selectedVariationsValues,
+                                        list,
+                                        attributeValueList),
                                     selectedKeywordId: selectedKeywordId,
                                   ),
                                 ),

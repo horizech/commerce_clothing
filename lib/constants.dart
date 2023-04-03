@@ -5,6 +5,9 @@ class Routes {
   static const String product = '/product';
   static const String cart = '/cart';
   static const String payment = '/payment';
+  static const String paymentMethod = '/payment_method';
+  static const String cardPayment = '/car_payment';
+
   static const String adminProducts = '/admin/products';
   static const String adminCombos = '/admin/combos';
   static const String admin = '/admin';

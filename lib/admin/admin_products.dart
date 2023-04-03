@@ -16,6 +16,7 @@ import 'package:flutter_up/widgets/up_text.dart';
 import 'package:flutter_up/widgets/up_textfield.dart';
 import 'package:shop/admin/admin_product.dart';
 import 'package:shop/dialogs/delete_dialog.dart';
+import 'package:shop/isUserAdmin.dart';
 import 'package:shop/models/collection.dart';
 import 'package:shop/models/product.dart';
 
@@ -34,14 +35,12 @@ class AdminProducts extends StatefulWidget {
 }
 
 class _AdminProductsState extends State<AdminProducts> {
-  User? user;
   int? selectedMedia;
   List<UpLabelValuePair> collectionDropdown = [];
   String currentParent = "";
   List<Collection> collections = [];
   TextEditingController nameController = TextEditingController();
   TextEditingController mediaController = TextEditingController();
-  bool isAuthorized = false;
   Collection selectedCollection = const Collection(name: "", id: -1);
   int view = 1;
   Product? currentProduct;
@@ -50,12 +49,6 @@ class _AdminProductsState extends State<AdminProducts> {
   @override
   void initState() {
     super.initState();
-    user ??= Apiraiser.authentication.getCurrentUser();
-    if (user != null && user!.roleIds != null) {
-      if (user!.roleIds!.contains(2) || user!.roleIds!.contains(1)) {
-        isAuthorized = true;
-      }
-    }
   }
 
   getCollections() async {
@@ -532,7 +525,7 @@ class _AdminProductsState extends State<AdminProducts> {
     return Scaffold(
       appBar: const UpAppBar(),
       drawer: const NavDrawer(),
-      body: isAuthorized
+      body: isUserAdmin()
           ? BlocConsumer<StoreCubit, StoreState>(
               listener: (context, state) {},
               builder: (context, state) {
