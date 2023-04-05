@@ -38,7 +38,7 @@ class _AllProductsState extends State<Products> {
       selectedKeywordId = id;
       keywordsList = k;
     }
-    if (s != null && s.isNotEmpty) {
+    if (s != null ) {
       attributeValueList = a;
       selectedVariationsValues = s;
     }

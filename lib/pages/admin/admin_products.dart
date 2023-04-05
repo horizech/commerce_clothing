@@ -14,7 +14,7 @@ import 'package:flutter_up/widgets/up_expansion_tile.dart';
 import 'package:flutter_up/widgets/up_icon.dart';
 import 'package:flutter_up/widgets/up_text.dart';
 import 'package:flutter_up/widgets/up_textfield.dart';
-import 'package:shop/admin/admin_product.dart';
+import 'package:shop/pages/admin/admin_product.dart';
 import 'package:shop/dialogs/delete_dialog.dart';
 import 'package:shop/isUserAdmin.dart';
 import 'package:shop/models/collection.dart';

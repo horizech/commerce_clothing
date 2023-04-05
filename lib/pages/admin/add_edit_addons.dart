@@ -150,7 +150,7 @@ class _AddEditAddonWidgetState extends State<AddEditAddonWidget> {
                             ),
                             SizedBox(
                               width: 60,
-                              child: UpButton(
+                              child: UpButton( 
                                 colorType: UpColorType.tertiary,
                                 onPressed: () async {
                                   AddOn newAddOn;
@@ -161,7 +161,7 @@ class _AddEditAddonWidgetState extends State<AddEditAddonWidget> {
                                         product: widget.currentProduct.id!,
                                         price: _addOnPriceController
                                                 .text.isEmpty
-                                            ? -1
+                                            ? null
                                             : double.parse(
                                                 _addOnPriceController.text));
                                     APIResult? result =
@@ -202,9 +202,12 @@ class _AddEditAddonWidgetState extends State<AddEditAddonWidget> {
                                       const SizedBox(
                                         width: 10,
                                       ),
-                                      UpText(
-                                          type: UpTextType.heading6,
-                                          "${e.price.toString()}£"),
+                                      Visibility(
+                                        visible: e.price != null,
+                                        child: UpText(
+                                            type: UpTextType.heading6,
+                                            "${e.price.toString()}£"),
+                                      ),
                                       const SizedBox(
                                         width: 10,
                                       ),

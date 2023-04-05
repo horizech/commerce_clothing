@@ -157,8 +157,10 @@ class _VariationFilterState extends State<VariationFilter> {
     variationControllers.values
         .toList()
         .forEach((controller) => controller.reset!());
+
     setState(() {
       selectedVariationsValues.clear();
+      widget.change!(selectedVariationsValues);
     });
   }
 

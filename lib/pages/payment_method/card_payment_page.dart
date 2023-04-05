@@ -3,6 +3,8 @@ import 'package:flutter_up/services/up_navigation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_up/themes/up_style.dart';
+import 'package:flutter_up/widgets/up_button.dart';
 import 'package:flutter_up/widgets/up_textfield.dart';
 import 'package:shop/widgets/cart/cart_cubit.dart';
 import 'package:shop/widgets/cart/cart_display.dart';
@@ -303,16 +305,20 @@ class _CardPaymentFormState extends State<CardPaymentForm> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            ServiceManager<UpNavigationService>().goBack();
-                          },
-                          child: const Text("Cancel")),
-                      ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {}
-                          },
-                          child: const Text(" Pay "))
+                      UpButton(
+                        onPressed: () {
+                          ServiceManager<UpNavigationService>().goBack();
+                        },
+                        style: UpStyle(buttonWidth: 100),
+                        text: "Cancel",
+                      ),
+                      UpButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {}
+                        },
+                        text: "Pay",
+                        style: UpStyle(buttonWidth: 100),
+                      )
                     ],
                   ),
                 ),
