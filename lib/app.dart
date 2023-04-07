@@ -43,7 +43,7 @@ class ShopApp extends StatelessWidget {
                 successColor: Colors.green,
               ),
               title: 'Shop',
-              initialRoute: Routes.loginSignup,
+              initialRoute: Routes.home,
               upRoutes: [
                 UpRoute(
                   path: Routes.loginSignup,

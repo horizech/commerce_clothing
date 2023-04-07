@@ -6,6 +6,7 @@ import 'package:shop/widgets/drawer/drawer.dart';
 import 'package:shop/widgets/header/header.dart';
 import 'package:shop/widgets/slider/parent_category_slider.dart';
 import 'package:shop/widgets/store/store_cubit.dart';
+import 'package:shop/widgets/footer/clothing_footer.dart';
 
 class SimpleHomePage extends StatelessWidget {
   const SimpleHomePage({
@@ -43,6 +44,7 @@ class SimpleHomePage extends StatelessWidget {
                   },
                 ),
               ),
+              const FooterWidget(),
             ],
           ),
         ));
