@@ -16,6 +16,8 @@ class StoreState {
   final List<Combo>? combos;
   final List<AddOn>? addOns;
   final List<ProductAttribute>? productAttributes;
+  final List<OrderStatusType>? orderStatusType;
+  final List<AttributeSwatch>? attributeSwatches;
 
   StoreState(
     this.isLoading,
@@ -32,6 +34,8 @@ class StoreState {
     this.productCombos,
     this.addOns,
     this.productAttributes,
+    this.orderStatusType,
+    this.attributeSwatches,
   );
 
   get productOptionsValuesMod => null;

@@ -3,11 +3,13 @@ import 'package:apiraiser/apiraiser.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:shop/models/add_on.dart';
+import 'package:shop/models/attribute_swatch.dart';
 import 'package:shop/models/collection.dart';
 import 'package:shop/models/collection_tree.dart';
 import 'package:shop/models/combo.dart';
 import 'package:shop/models/gallery.dart';
 import 'package:shop/models/keyword.dart';
+import 'package:shop/models/order_status_type.dart';
 import 'package:shop/models/product_attribute.dart';
 import 'package:shop/models/product_combo.dart';
 import 'package:shop/models/attribute_value.dart';
@@ -17,8 +19,10 @@ part 'store_state.dart';
 
 class StoreCubit extends Cubit<StoreState> {
   StoreCubit()
-      : super(StoreState(
-            false, false, false, "", [], null, [], [], [], [], [], [], [], []));
+      : super(
+          StoreState(false, false, false, "", [], null, [], [], [], [], [], [],
+              [], [], [], []),
+        );
 
   void getStore() async {
     Apiraiser.validateAuthentication();
@@ -35,6 +39,8 @@ class StoreCubit extends Cubit<StoreState> {
         Apiraiser.data.get("Combos", 0),
         Apiraiser.data.get("ProductAddons", 0),
         Apiraiser.data.get("ProductAttributes", 0),
+        Apiraiser.data.get("OrderStatusTypes", 0),
+        Apiraiser.data.get("AttributeSwatches", 0),
       ]);
 
       List<APIResult> result = futureResult as List<APIResult>;
@@ -71,6 +77,14 @@ class StoreCubit extends Cubit<StoreState> {
                 as List<dynamic>)
             .map((t) => ProductAttribute.fromJson(t as Map<String, dynamic>))
             .toList();
+        List<OrderStatusType> orderStatusTypes =
+            (result[9].data as List<dynamic>)
+                .map((t) => OrderStatusType.fromJson(t as Map<String, dynamic>))
+                .toList();
+        List<AttributeSwatch> attributeSwatches =
+            (result[10].data as List<dynamic>)
+                .map((t) => AttributeSwatch.fromJson(t as Map<String, dynamic>))
+                .toList();
 
         CollectionTree collectionTree =
             CollectionTree.fromCollectionList(collections);
@@ -86,6 +100,8 @@ class StoreCubit extends Cubit<StoreState> {
           combos,
           addons,
           productAttributes,
+          orderStatusTypes,
+          attributeSwatches,
         );
       }
     } catch (e) {
@@ -94,42 +110,48 @@ class StoreCubit extends Cubit<StoreState> {
   }
 
   void setStoreStart() {
-    emit(StoreState(
-        true, false, false, "", [], null, [], [], [], [], [], [], [], []));
+    emit(StoreState(true, false, false, "", [], null, [], [], [], [], [], [],
+        [], [], [], []));
   }
 
   void setStoreSuccess(
-    List<Collection>? collections,
-    CollectionTree? collectionTree,
-    List<Keyword>? keywords,
-    List<Attribute>? attributes,
-    List<AttributeValue>? attributeValues,
-    List<Gallery>? mediaGroups,
-    List<ProductCombo>? productCombos,
-    List<Combo>? combos,
-    List<AddOn>? addOns,
-    List<ProductAttribute> productAttributes,
-  ) {
-    emit(StoreState(
-      false,
-      true,
-      false,
-      null,
-      collections,
-      collectionTree,
-      keywords,
-      attributes,
-      attributeValues,
-      mediaGroups,
-      combos,
-      productCombos,
-      addOns,
-      productAttributes,
-    ));
+      List<Collection>? collections,
+      CollectionTree? collectionTree,
+      List<Keyword>? keywords,
+      List<Attribute>? attributes,
+      List<AttributeValue>? attributeValues,
+      List<Gallery>? mediaGroups,
+      List<ProductCombo>? productCombos,
+      List<Combo>? combos,
+      List<AddOn>? addOns,
+      List<ProductAttribute> productAttributes,
+      List<OrderStatusType> orderStatusTypes,
+      List<AttributeSwatch> attributeSwatches) {
+    emit(
+      StoreState(
+          false,
+          true,
+          false,
+          null,
+          collections,
+          collectionTree,
+          keywords,
+          attributes,
+          attributeValues,
+          mediaGroups,
+          combos,
+          productCombos,
+          addOns,
+          productAttributes,
+          orderStatusTypes,
+          attributeSwatches),
+    );
   }
 
   void setStoreError(String? error) {
-    emit(StoreState(
-        false, false, true, error, [], null, [], [], [], [], [], [], [], []));
+    emit(
+      StoreState(false, false, true, error, [], null, [], [], [], [], [], [],
+          [], [], [], []),
+    );
   }
 }
