@@ -2,7 +2,6 @@ import 'package:apiraiser/apiraiser.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:shop/models/product.dart';
-import 'package:shop/widgets/variations/variation_types.dart';
 
 class ProductService {
   static Future<List<Product>> getProducts(
@@ -37,27 +36,16 @@ class ProductService {
 //"ARRAY[${1,2,3}]";
 
       List<String> filters = [];
-
       if (selectedVariationsValues!.isNotEmpty) {
-        if (selectedVariationsValues[VariationTypes.size.index] != null &&
-            selectedVariationsValues[VariationTypes.size.index]!.isNotEmpty) {
-          String sizes = "";
-          sizes =
-              selectedVariationsValues[VariationTypes.size.index]!.join(",");
-          debugPrint(sizes);
-          // jsonQuery["sizes"] = "ARRAY[$sizes]";
-          filters.add('"1": "{$sizes}"');
-        }
-        if (selectedVariationsValues[VariationTypes.color.index] != null &&
-            selectedVariationsValues[VariationTypes.color.index]!.isNotEmpty) {
-          String colors = "";
-          colors =
-              selectedVariationsValues[VariationTypes.color.index]!.join(",");
-          debugPrint(colors);
-          // jsonQuery["colors"] = "ARRAY[$colors]";
-          filters.add('"2": "{$colors}"');
-        }
+        selectedVariationsValues.forEach((key, value) {
+          String attributes = "";
+          if (value.isNotEmpty) {
+            attributes = selectedVariationsValues[key]!.join(",");
+            filters.add('"$key": "{$attributes}"');
+          }
+        });
       }
+
       if (filters.isNotEmpty) {
         // SELECT * FROM find_products(null, 'pla', '{"Color": "{8, 9, 10}"}'::JSONB, ARRAY[1]);
         jsonQuery["filters"] = "'{${filters.join(',')}}'::jsonb";

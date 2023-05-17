@@ -488,14 +488,10 @@ class _PaymentFormState extends State<PaymentForm> {
                     runSpacing: 10.0,
                     spacing: 10.0,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Text(
                           "Contact Information",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(fontSize: 20, color: Colors.black),
                         ),
                       ),
                       Padding(
@@ -509,7 +505,7 @@ class _PaymentFormState extends State<PaymentForm> {
                             "Already have an account?Login",
                             style: Theme.of(context)
                                 .textTheme
-                                .headline6!
+                                .titleLarge!
                                 .copyWith(fontSize: 14, color: Colors.black),
                           ),
                         ),
@@ -723,7 +719,7 @@ class _PaymentFormState extends State<PaymentForm> {
                         child: Text("< Return to Cart",
                             style: Theme.of(context)
                                 .textTheme
-                                .headline6!
+                                .titleLarge!
                                 .copyWith(color: Colors.black, fontSize: 16)),
                       ),
                       SizedBox(

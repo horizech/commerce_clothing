@@ -88,10 +88,12 @@ class _AddEditKeywordDialogState extends State<AddEditKeywordDialog> {
                         ? widget.currentKeyword!.id
                         : null);
                 if (result != null) {
-                  showUpToast(
-                    context: context,
-                    text: result.message ?? "",
-                  );
+                  if (mounted) {
+                    showUpToast(
+                      context: context,
+                      text: result.message ?? "",
+                    );
+                  }
                   if (mounted) {
                     Navigator.pop(
                       context,
@@ -99,10 +101,12 @@ class _AddEditKeywordDialogState extends State<AddEditKeywordDialog> {
                     );
                   }
                 } else {
-                  showUpToast(
-                    context: context,
-                    text: "An Error Occurred",
-                  );
+                  if (mounted) {
+                    showUpToast(
+                      context: context,
+                      text: "An Error Occurred",
+                    );
+                  }
                 }
               },
             ),

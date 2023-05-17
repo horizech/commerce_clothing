@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_up/config/up_config.dart';
 import 'package:shop/models/keyword.dart';
 
 class KeywordSelector extends StatefulWidget {
@@ -37,10 +38,10 @@ class _KeywordSelectorState extends State<KeywordSelector> {
           style: TextStyle(
               color: widget.isSelected
                   ? Colors.white
-                  : Theme.of(context).primaryColor),
+                  : UpConfig.of(context).theme.primaryColor),
         ),
         backgroundColor: widget.isSelected
-            ? Theme.of(context).primaryColor
+            ? UpConfig.of(context).theme.primaryColor
             : Colors.grey[100],
       ),
     );

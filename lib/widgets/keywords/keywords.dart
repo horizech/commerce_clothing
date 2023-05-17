@@ -59,8 +59,8 @@ class _KeywordsState extends State<Keywords> {
         if (snapshot.connectionState != ConnectionState.done) {
           return Container(
             color: Colors.grey[100],
-            child: Column(
-              children: const [],
+            child: const Column(
+              children: [],
             ),
           );
         }

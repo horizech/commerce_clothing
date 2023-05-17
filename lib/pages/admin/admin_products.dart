@@ -221,8 +221,8 @@ class _AdminProductsState extends State<AdminProducts> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: const [
+            const Row(
+              children: [
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Align(
@@ -447,16 +447,20 @@ class _AdminProductsState extends State<AdminProducts> {
         data: Collection.toJson(collection),
         collectionId: c != null ? c.id! : null);
     if (result != null && result.success) {
-      showUpToast(
-        context: context,
-        text: result.message ?? "",
-      );
+      if (mounted) {
+        showUpToast(
+          context: context,
+          text: result.message ?? "",
+        );
+      }
       getCollections();
     } else {
-      showUpToast(
-        context: context,
-        text: "An Error Occurred",
-      );
+      if (mounted) {
+        showUpToast(
+          context: context,
+          text: "An Error Occurred",
+        );
+      }
     }
   }
 
@@ -479,17 +483,21 @@ class _AdminProductsState extends State<AdminProducts> {
     APIResult? result =
         await AddEditProductService.deleteCollection(collectionId);
     if (result != null && result.success) {
-      showUpToast(context: context, text: result.message ?? "");
+      if (mounted) {
+        showUpToast(context: context, text: result.message ?? "");
+      }
       selectedCollection = const Collection(name: "", id: -1);
       nameController.text = "";
       mediaController = TextEditingController();
       // currentParent = "";
       getCollections();
     } else {
-      showUpToast(
-        context: context,
-        text: "An Error Occurred",
-      );
+      if (mounted) {
+        showUpToast(
+          context: context,
+          text: "An Error Occurred",
+        );
+      }
     }
   }
 
@@ -505,16 +513,20 @@ class _AdminProductsState extends State<AdminProducts> {
         APIResult? result =
             await AddEditProductService.deleteProduct(productId);
         if (result != null && result.success) {
-          showUpToast(
-            context: context,
-            text: result.message ?? "",
-          );
+          if (mounted) {
+            showUpToast(
+              context: context,
+              text: result.message ?? "",
+            );
+          }
           setState(() {});
         } else {
-          showUpToast(
-            context: context,
-            text: "An Error Occurred",
-          );
+          if (mounted) {
+            showUpToast(
+              context: context,
+              text: "An Error Occurred",
+            );
+          }
         }
       }
     });

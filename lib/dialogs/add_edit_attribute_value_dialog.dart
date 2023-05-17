@@ -105,10 +105,12 @@ class _AddEditAttributeValueDialogState
                             : null);
                 if (result != null) {
                   if (result.success) {
-                    showUpToast(
-                      context: context,
-                      text: result.message ?? "",
-                    );
+                    if (mounted) {
+                      showUpToast(
+                        context: context,
+                        text: result.message ?? "",
+                      );
+                    }
                     if (mounted) {
                       Navigator.pop(
                         context,
@@ -116,10 +118,12 @@ class _AddEditAttributeValueDialogState
                       );
                     }
                   } else {
-                    showUpToast(
-                      context: context,
-                      text: result.message ?? "",
-                    );
+                    if (mounted) {
+                      showUpToast(
+                        context: context,
+                        text: result.message ?? "",
+                      );
+                    }
                     if (mounted) {
                       Navigator.pop(
                         context,
@@ -127,10 +131,12 @@ class _AddEditAttributeValueDialogState
                     }
                   }
                 } else {
-                  showUpToast(
-                    context: context,
-                    text: "An Error Occurred",
-                  );
+                  if (mounted) {
+                    showUpToast(
+                      context: context,
+                      text: "An Error Occurred",
+                    );
+                  }
                 }
               },
             ),

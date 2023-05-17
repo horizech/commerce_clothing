@@ -82,7 +82,7 @@ class CartPage extends StatelessWidget {
                                 "Cart",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline1!
+                                    .displayLarge!
                                     .copyWith(fontSize: 20),
                               ),
                             ),
@@ -189,7 +189,7 @@ Widget cartListDisplay(
                   child: Text(item.product!.name,
                       style: Theme.of(context)
                           .textTheme
-                          .headline6!
+                          .titleLarge!
                           .copyWith(color: Colors.black)),
                 ),
                 Wrap(
@@ -234,7 +234,7 @@ Widget cartListDisplay(
                         )) * item.quantity}",
                     style: Theme.of(context)
                         .textTheme
-                        .headline6!
+                        .titleLarge!
                         .copyWith(color: Colors.black, fontSize: 16)),
                 GestureDetector(
                     child: const Text("Remove",
@@ -354,7 +354,7 @@ Widget cartGridDisplay(
                                 "",
                             style: Theme.of(context)
                                 .textTheme
-                                .headline6!
+                                .titleLarge!
                                 .copyWith(color: Colors.black),
                           ),
                         ),
@@ -409,7 +409,7 @@ Widget cartGridDisplay(
                               )) * item.quantity}",
                           style: Theme.of(context)
                               .textTheme
-                              .headline6!
+                              .titleLarge!
                               .copyWith(color: Colors.black)),
                       GestureDetector(
                           child: const Text("Remove",
@@ -454,13 +454,13 @@ Widget paymentAndBackButton(BuildContext context, List<CartItem> cartItem) {
             spacing: 15.0,
             children: [
               Text("Total : ",
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: const Color.fromARGB(255, 80, 80, 80),
                       fontSize: 16)),
               Text("$total",
                   style: Theme.of(context)
                       .textTheme
-                      .headline6!
+                      .titleLarge!
                       .copyWith(color: Colors.black, fontSize: 20)),
             ],
           ),
@@ -480,7 +480,7 @@ Widget paymentAndBackButton(BuildContext context, List<CartItem> cartItem) {
               child: Text("< Wanna Shop more",
                   style: Theme.of(context)
                       .textTheme
-                      .headline6!
+                      .titleLarge!
                       .copyWith(color: Colors.black, fontSize: 16)),
             ),
             UpButton(
@@ -514,8 +514,10 @@ Widget cartList(BuildContext context) {
             padding: const EdgeInsets.only(left: 30.0, top: 10.0, bottom: 10.0),
             child: Text(
               "Cart",
-              style:
-                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 20),
+              style: Theme.of(context)
+                  .textTheme
+                  .displayLarge!
+                  .copyWith(fontSize: 20),
             ),
           ),
         ),
@@ -526,14 +528,14 @@ Widget cartList(BuildContext context) {
               bottom: BorderSide(width: 1.0, color: Colors.grey),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 30.0, top: 10.0, bottom: 10.0),
+          child: const Padding(
+            padding: EdgeInsets.only(left: 30.0, top: 10.0, bottom: 10.0),
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
+                children: [
                   // Text("ITEM"),
                   // SizedBox(
                   //   width: 120,

@@ -116,17 +116,13 @@ class _CardPaymentFormState extends State<CardPaymentForm> {
                       ),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        const Icon(Icons.lock),
+                        Icon(Icons.lock),
                         Text(
                           "Payment detail",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(fontSize: 20, color: Colors.black),
                         ),
                       ],
                     ),

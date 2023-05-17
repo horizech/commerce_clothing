@@ -46,16 +46,20 @@ class _AdminKeywordsState extends State<AdminKeywords> {
     APIResult? result = await AddEditProductService.addEditkeyword(
         data: Keyword.toJson(keyword), keywordId: k != null ? k.id! : null);
     if (result != null && result.success) {
-      showUpToast(
-        context: context,
-        text: result.message ?? "",
-      );
+      if (mounted) {
+        showUpToast(
+          context: context,
+          text: result.message ?? "",
+        );
+      }
       getKeywords();
     } else {
-      showUpToast(
-        context: context,
-        text: "An Error Occurred",
-      );
+      if (mounted) {
+        showUpToast(
+          context: context,
+          text: "An Error Occurred",
+        );
+      }
     }
   }
 
@@ -71,15 +75,19 @@ class _AdminKeywordsState extends State<AdminKeywords> {
         APIResult? result =
             await AddEditProductService.deleteKeyword(keywordId);
         if (result != null && result.success) {
-          showUpToast(context: context, text: result.message ?? "");
+          if (mounted) {
+            showUpToast(context: context, text: result.message ?? "");
+          }
           selectedKeyword = const Keyword(name: "", id: -1);
           nameController.text = "";
           getKeywords();
         } else {
-          showUpToast(
-            context: context,
-            text: "An Error Occurred",
-          );
+          if (mounted) {
+            showUpToast(
+              context: context,
+              text: "An Error Occurred",
+            );
+          }
         }
       }
     });

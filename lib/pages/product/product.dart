@@ -11,6 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_up/widgets/up_button.dart';
 import 'package:flutter_up/widgets/up_text.dart';
 import 'package:shop/constants.dart';
+import 'package:shop/models/attribute.dart';
+import 'package:shop/models/attribute_swatch.dart';
 import 'package:shop/models/attribute_value.dart';
 import 'package:shop/models/cart_item.dart';
 import 'package:shop/models/media.dart';
@@ -32,7 +34,7 @@ import 'package:shop/widgets/store/store_cubit.dart';
 import 'package:shop/widgets/variations/color_variation.dart';
 import 'package:shop/widgets/variations/size_variation.dart';
 import 'package:shop/widgets/variations/variation_controller.dart';
-import 'package:shop/widgets/variations/variation_types.dart';
+import 'package:shop/widgets/variations/variation_selection_mode.dart';
 
 class ProductPage extends StatelessWidget {
   final Map<String, String>? queryParams;
@@ -125,134 +127,168 @@ class ProductDetailedInfo extends StatefulWidget {
 }
 
 class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
-  Map<int, int> selectedVariationsValues = {0: 0, 1: 0};
+  Map<int, dynamic> selectedVariationsValues = {};
   Map<int, VariationController> variationControllers = {};
   int? gallery = 0;
   bool? mainMediaUpdate = false;
   int quantity = 0;
-  List<AttributeValue> sizeVariation = [];
-  List<AttributeValue> colorVariation = [];
-  List<int> disabledSizes = [];
-  List<int> disabledColors = [];
   int maxItems = -1;
   List<int> mediaList = [];
-  int sizeAttributeId = 0;
-  int colorAttributeId = 0;
   int? selectedVariationId;
   int defaultValue = 1;
+  List<Attribute> attributes = [];
+  List<AttributeValue> attributeValues = [];
+  List<AttributeSwatch> attributeSwatches = [];
+  Map<Attribute, List<AttributeValue>> variations = {};
+  Map<int, List<int>> disabledVariations = {};
+  Map<int, List<int>> selectedVariations = {};
 
-  static int convertToInt(dynamic a) {
-    return int.parse(a.toString());
+  clearSelectedVariation(int keyIndex) {
+    Map<int, dynamic> map = {};
+    selectedVariationsValues.forEach((key, value) {
+      if (keyIndex != key) {
+        map[key] = value;
+      }
+    });
+    return map;
   }
 
-  onVariationChange(int key, List<int> values) {
-    if (key == VariationTypes.color.index) {
-      selectedVariationsValues[key] = values[0];
+  onVariationChange(int keyValue, List<int> values) {
+    selectedVariationsValues[keyValue] = values[0];
+    selectedVariationId = null;
+    selectedVariations[keyValue] = values;
+    List<ProductVariation> notAllowedVariation = [];
+    List<ProductVariation> allowedvariations = [];
 
-      List<int> allowedSizes = widget.productVariations!
-          .where((element) =>
-              values.contains(element.options["$colorAttributeId"]) &&
-              element.options["$sizeAttributeId"] != null)
-          .map(
-            (e) => e.options["$sizeAttributeId"]!,
-          )
-          .map((e) => convertToInt(e))
-          .toSet()
-          .toList();
+    //allowed variations
+    if (selectedVariationsValues.isNotEmpty) {
+      if (widget.productVariations!.any((element) =>
+          element.options["$keyValue"] == selectedVariationsValues[keyValue])) {
+        allowedvariations = widget.productVariations!
+            .where((element) =>
+                element.options["$keyValue"] ==
+                selectedVariationsValues[keyValue])
+            .toList();
 
-      if (sizeVariation.isNotEmpty) {
-        setState(() {
-          disabledSizes = sizeVariation
-              .where((element) => !allowedSizes.contains(element.id))
-              .map((e) => e.id!)
-              .toList();
-          if (disabledSizes
-              .contains(selectedVariationsValues[VariationTypes.size.index])) {
-            // reset sizes
+        // match allowed and selected variations
+        if (allowedvariations.isNotEmpty) {
+          selectedVariationsValues.forEach((key, value) {
+            if (key != keyValue) {
+              if (allowedvariations
+                  .every((element) => !element.options.containsValue(value))) {
+                selectedVariationsValues = clearSelectedVariation(key);
+              }
+              if (selectedVariationsValues.isNotEmpty) {
+                selectedVariations.clear();
+                selectedVariationsValues.forEach((key, value) {
+                  selectedVariations[key] = [value];
+                });
 
-            variationControllers[VariationTypes.size.index]!.reset!();
-          }
-        });
-      }
-    }
-
-    if (key == VariationTypes.size.index) {
-      selectedVariationsValues[key] = values[0];
-
-      List<int> allowedColors = widget.productVariations!
-          .where((element) =>
-              values.contains(element.options["$sizeAttributeId"]) &&
-              element.options["$colorAttributeId"] != null)
-          .map(
-            (e) => e.options["$colorAttributeId"]!,
-          )
-          .map((e) => convertToInt(e))
-          .toSet()
-          .toList();
-
-      if (colorVariation.isNotEmpty) {
-        setState(() {
-          disabledColors = colorVariation
-              .where((element) => !allowedColors.contains(element.id))
-              .map((e) => e.id!)
-              .toList();
-          if (disabledColors
-              .contains(selectedVariationsValues[VariationTypes.color.index])) {
-            // reset color
-            variationControllers[VariationTypes.color.index]!.reset!();
-          }
-        });
-      }
-    }
-
-    if (selectedVariationsValues.isNotEmpty &&
-        selectedVariationsValues[VariationTypes.color.index] != 0 &&
-        selectedVariationsValues[VariationTypes.size.index] != 0) {
-      maxItems = 0;
-      if (widget.productVariations!.any((v) =>
-          (v.options["$colorAttributeId"] ==
-                  selectedVariationsValues[VariationTypes.color.index] &&
-              v.options["$sizeAttributeId"] ==
-                  selectedVariationsValues[VariationTypes.size.index]))) {
-        selectedVariationId = widget.productVariations!
-            .firstWhere((v) => (v.options["$colorAttributeId"] ==
-                    selectedVariationsValues[VariationTypes.color.index] &&
-                v.options["$sizeAttributeId"] ==
-                    selectedVariationsValues[VariationTypes.size.index]))
-            .id!;
-        if (widget.productVariations != null &&
-            widget.productVariations!.isNotEmpty) {
-          gallery = widget.productVariations!
-              .firstWhere(
-                (v) => (v.options["$colorAttributeId"] ==
-                        selectedVariationsValues[VariationTypes.color.index] &&
-                    v.options["$sizeAttributeId"] ==
-                        selectedVariationsValues[VariationTypes.size.index]),
-              )
-              .gallery;
+                variationControllers.forEach((key, value) {
+                  if (!selectedVariations.containsKey(key)) {
+                    variationControllers[key]!.reset!();
+                  }
+                });
+              }
+            }
+          });
         }
+      }
+    }
 
-        mainMediaUpdate = true;
-        if (widget.stock != null && widget.stock!.isNotEmpty) {
-          if (widget.stock!
-              .any((s) => s.productVariation == selectedVariationId)) {
-            maxItems = widget.stock!
-                .firstWhere((s) => s.productVariation == selectedVariationId)
-                .quantity;
-            defaultValue = 1;
-            quantity = 1;
+    // not allowed variation
+    if (widget.productVariations != null) {
+      notAllowedVariation = widget.productVariations!.where((element) {
+        bool matched = false;
+        for (var key in selectedVariationsValues.keys) {
+          if (element.options["$key"] != selectedVariationsValues[key]) {
+            matched = true;
           }
         }
-        mainMediaUpdate = true;
-
-        0;
-        mediaList = [];
-      } else {
-        maxItems = -1;
-        mainMediaUpdate = false;
-        gallery = widget.product.gallery;
-      }
+        return matched;
+      }).toList();
     }
+
+    // disabled variations
+    if (notAllowedVariation.isNotEmpty) {
+      disabledVariations = {};
+
+      variations.forEach((attribute, attributeValue) {
+        List<int> disbled = [];
+        for (var variation in notAllowedVariation) {
+          variation.options.forEach((key1, value1) {
+            if (allowedvariations
+                .every((element) => !element.options.containsValue(value1))) {
+              disbled.add(value1);
+            }
+          });
+        }
+        disabledVariations[attribute.id!] = disbled.toSet().toList();
+      });
+    }
+
+    if (selectedVariationsValues.isNotEmpty) {
+      maxItems = -1;
+      if (widget.productVariations != null &&
+          widget.productVariations!.isNotEmpty &&
+          widget.productVariations!.any((element) {
+            List<bool> matched = [];
+
+            if (selectedVariationsValues.length == element.options.length) {
+              for (var key in selectedVariationsValues.keys) {
+                if (element.options["$key"] == selectedVariationsValues[key]) {
+                  matched.add(true);
+                } else {
+                  matched.add(false);
+                }
+              }
+            }
+
+            return matched.isNotEmpty &&
+                    matched.length > 1 &&
+                    matched.every((element) => element == true)
+                ? true
+                : false;
+          })) {
+        selectedVariationId = widget.productVariations!.firstWhere((v) {
+          List<bool> matched = [];
+
+          if (selectedVariationsValues.length == v.options.length) {
+            for (var key in selectedVariationsValues.keys) {
+              if (v.options["$key"] == selectedVariationsValues[key]) {
+                matched.add(true);
+              } else {
+                matched.add(false);
+              }
+            }
+          }
+
+          return matched.isNotEmpty &&
+                  matched.length > 1 &&
+                  matched.every((element) => element == true)
+              ? true
+              : false;
+        }).id!;
+      }
+      mainMediaUpdate = true;
+      if (widget.stock != null && widget.stock!.isNotEmpty) {
+        if (widget.stock!
+            .any((s) => s.productVariation == selectedVariationId)) {
+          maxItems = widget.stock!
+              .firstWhere((s) => s.productVariation == selectedVariationId)
+              .quantity;
+          defaultValue = 1;
+          quantity = 1;
+        }
+      }
+      mediaList = [];
+    } else {
+      maxItems = -1;
+      mainMediaUpdate = false;
+      gallery = widget.product.gallery;
+    }
+
+    setState(() {});
   }
 
   onQuantityChange(int count) {
@@ -261,71 +297,51 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
 
   @override
   Widget build(BuildContext context) {
-    int totalStock = 0;
-    List<dynamic> sizes = [];
-    List<dynamic> colors = [];
     try {
       return BlocConsumer<StoreCubit, StoreState>(
         listener: (context, state) {},
         builder: (context, state) {
-          if (state.attributes != null && state.attributes!.isNotEmpty) {
-            if (state.attributes!
-                .any((element) => element.name.toLowerCase() == "size")) {
-              sizeAttributeId = state.attributes!
-                  .firstWhere((element) => element.name == "Size")
-                  .id!;
+          if (attributes.isEmpty) {
+            if (state.attributes != null && state.attributes!.isNotEmpty) {
+              attributes = state.attributes!;
             }
-            if (state.attributes!
-                .any((element) => element.name.toLowerCase() == "color")) {
-              colorAttributeId = state.attributes!
-                  .firstWhere((element) => element.name == "Color")
-                  .id!;
+          }
+          if (attributeValues.isEmpty) {
+            if (state.attributeValues != null &&
+                state.attributeValues!.isNotEmpty) {
+              attributeValues = state.attributeValues!;
+            }
+          }
+          if (attributeSwatches.isEmpty) {
+            if (state.attributeSwatches != null &&
+                state.attributeSwatches!.isNotEmpty) {
+              attributeSwatches = state.attributeSwatches!;
             }
           }
 
-          if (widget.productVariations != null &&
-              widget.productVariations!.isNotEmpty &&
-              maxItems == -1 &&
-              sizes.isEmpty &&
-              colors.isEmpty) {
-            sizes = widget.productVariations!
-                .map((e) => e.options["$sizeAttributeId"])
-                .toSet()
-                .toList();
-
-            colors = widget.productVariations!
-                .map((e) => e.options["$colorAttributeId"])
-                .where((element) => element > 0)
-                .toSet()
-                .toList();
-          }
-          if (state.attributeValues != null &&
-              state.attributeValues!.isNotEmpty) {
-            List<AttributeValue> allSizes = state.attributeValues!
-                .where((e) => e.attribute == sizeAttributeId)
-                .toList();
-
-            List<AttributeValue> allColors = state.attributeValues!
-                .where((e) => e.attribute == colorAttributeId)
-                .toList();
-
-            if (colorVariation.isEmpty && sizeVariation.isEmpty) {
-              try {
-                //variation sizes list
-                for (int i = 0; i < sizes.length; i++) {
-                  sizeVariation.add(allSizes
-                      .where((element) => element.id == sizes[i])
+          if (widget.productVariations != null) {
+            List<int> attributeValueList = [];
+            for (var element in widget.productVariations!) {
+              element.options.forEach((key, value) {
+                attributeValueList.add(value);
+              });
+            }
+            attributeValueList = attributeValueList.toSet().toList();
+            for (var attribute in attributes) {
+              List<AttributeValue> values = [];
+              for (var item in attributeValueList) {
+                if (attributeValues.any((element) =>
+                    element.id == item &&
+                    element.attribute ==
+                        attributes
+                            .where((element) => element.id == attribute.id)
+                            .first
+                            .id)) {
+                  values.add(attributeValues
+                      .where((element) => element.id == item)
                       .first);
                 }
-                //variation color list
-
-                for (int i = 0; i < colors.length; i++) {
-                  colorVariation.add(allColors
-                      .where((element) => element.id == colors[i])
-                      .first);
-                }
-              } catch (e) {
-                debugPrint(e.toString());
+                variations[attribute] = values;
               }
             }
           }
@@ -335,8 +351,8 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
           }
 
           if (variationControllers.isEmpty) {
-            for (var element in VariationTypes.values) {
-              variationControllers[element.index] = VariationController();
+            for (var element in variations.keys) {
+              variationControllers[element.id!] = VariationController();
             }
           }
 
@@ -382,44 +398,65 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                             height: 10,
                           ),
                           Visibility(
-                            visible: widget.productVariations != null &&
-                                widget.productVariations!.isNotEmpty,
+                            visible: variations.isNotEmpty,
                             child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Size",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline4!
-                                        .copyWith(fontSize: 16),
-                                  ),
-                                  SizeVariationWidget(
-                                    sizeVariations: sizeVariation,
-                                    disabledValues: disabledSizes,
-                                    onChange: (s) => onVariationChange(
-                                        VariationTypes.size.index, s),
-                                    controller: variationControllers[
-                                        VariationTypes.size.index],
-                                    // selectedValues: selectedVariationsValues.,
-                                  ),
-                                  Text(
-                                    "Color",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline4!
-                                        .copyWith(fontSize: 16),
-                                  ),
-                                  ColorVariationWidget(
-                                    colorVariations: colorVariation,
-                                    disabledValues: disabledColors,
-                                    onChange: (c) => onVariationChange(
-                                        VariationTypes.color.index, c),
-                                    controller: variationControllers[
-                                        VariationTypes.color.index],
-                                  ),
-                                ]),
+                              children: [
+                                ...variations.keys.map((key) {
+                                  if (attributeSwatches.any(
+                                      (element) => element.id == key.swatch)) {
+                                    AttributeSwatch swatch = attributeSwatches
+                                        .where((element) =>
+                                            element.id == key.swatch)
+                                        .first;
+
+                                    if (swatch.name.toLowerCase() == "color") {
+                                      return Wrap(
+                                        children: [
+                                          variations.isNotEmpty
+                                              ? Text("${key.name} : ")
+                                              : const Text(""),
+                                          ColorVariationWidget(
+                                            selectedValues:
+                                                selectedVariations[key.id],
+                                            controller:
+                                                variationControllers[key.id],
+                                            disabledValues:
+                                                disabledVariations[key.id!],
+                                            colorVariations: variations[key],
+                                            onChange: (c) =>
+                                                onVariationChange(key.id!, c),
+                                            mode: VariationSelectionMode.choose,
+                                          ),
+                                        ],
+                                      );
+                                    } else if (swatch.name.toLowerCase() ==
+                                        "button") {
+                                      return Wrap(
+                                        children: [
+                                          Text("${key.name} : "),
+                                          SizeVariationWidget(
+                                            selectedValues:
+                                                selectedVariations[key.id],
+                                            disabledValues:
+                                                disabledVariations[key.id!],
+                                            sizeVariations: variations[key],
+                                            controller:
+                                                variationControllers[key.id],
+                                            onChange: (c) =>
+                                                onVariationChange(key.id!, c),
+                                            mode: VariationSelectionMode.choose,
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      return const SizedBox();
+                                    }
+                                  } else {
+                                    return const SizedBox();
+                                  }
+                                }).toList(),
+                              ],
+                            ),
                           ),
                           const SizedBox(
                             height: 10,
@@ -444,7 +481,7 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                       : Text("OUT OF STOCK",
                                           style: Theme.of(context)
                                               .textTheme
-                                              .headline5!
+                                              .headlineSmall!
                                               .copyWith(color: Colors.red))
                             ],
                           ),
@@ -570,6 +607,42 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
   }
 }
 
+class ButtonWidget extends StatefulWidget {
+  final Function onVariationChange;
+  final Attribute attribute;
+  final Map<int, List<int>> disabledValues;
+  final Map<Attribute, List<AttributeValue>> variations;
+  const ButtonWidget(
+      {Key? key,
+      required this.disabledValues,
+      required this.attribute,
+      required this.variations,
+      required this.onVariationChange})
+      : super(key: key);
+
+  @override
+  State<ButtonWidget> createState() => _ButtonWidgetState();
+}
+
+class _ButtonWidgetState extends State<ButtonWidget> {
+  @override
+  Widget build(BuildContext context) {
+    widget.disabledValues;
+    return Wrap(
+      children: [
+        Text("${widget.attribute.name} : "),
+        SizeVariationWidget(
+          // selectedValues: ,
+          disabledValues: widget.disabledValues[widget.attribute.id!],
+          sizeVariations: widget.variations[widget.attribute],
+          onChange: (c) => widget.onVariationChange(c),
+          mode: VariationSelectionMode.choose,
+        ),
+      ],
+    );
+  }
+}
+
 Widget _productDetais(Product product, BuildContext context) {
   return ExpansionTile(
     title: const Text("Product Details"),
@@ -603,14 +676,14 @@ Widget ourServices(BuildContext context) {
             children: [
               const Icon(Icons.fire_truck, size: 40),
               Text("Shipping Charges",
-                  style: Theme.of(context).textTheme.headline1),
+                  style: Theme.of(context).textTheme.displayLarge),
             ],
           ),
           Padding(
             padding: const EdgeInsets.only(left: 40, top: 0, bottom: 10),
             child: Text(
               "Flat Rs. 200 on all orders ",
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
           )
         ],
@@ -624,14 +697,15 @@ Widget ourServices(BuildContext context) {
           Row(
             children: [
               const Icon(Icons.hourglass_bottom, size: 40),
-              Text("Support 24/7", style: Theme.of(context).textTheme.headline1)
+              Text("Support 24/7",
+                  style: Theme.of(context).textTheme.displayLarge)
             ],
           ),
           Padding(
             padding: const EdgeInsets.only(left: 40, top: 0, bottom: 10),
             child: Text(
               "Contact us 24/7 hours",
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
           )
         ],
@@ -646,14 +720,14 @@ Widget ourServices(BuildContext context) {
             children: [
               const Icon(Icons.pin_drop, size: 40),
               Text("Track Your Order",
-                  style: Theme.of(context).textTheme.headline1),
+                  style: Theme.of(context).textTheme.displayLarge),
             ],
           ),
           Padding(
             padding: const EdgeInsets.only(left: 40, top: 0, bottom: 10),
             child: Text(
               "track your order for quick updates",
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
           )
         ],
@@ -696,11 +770,11 @@ class GetMedia extends StatelessWidget {
             return Container(
               height: 500,
               color: Colors.grey[200],
-              child: Center(
+              child: const Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       SizedBox(
                           width: 40,
                           height: 40,
@@ -808,87 +882,3 @@ class ProductImagesState extends State<ProductImages> {
     );
   }
 }
-
-// style: ElevatedButton.styleFrom(
-//   primary: Colors.white,
-//   onPrimary: Colors.black,
-//   padding: const EdgeInsets.symmetric(
-//       horizontal: 110, vertical: 15),
-//   textStyle: const TextStyle(
-//       fontSize: 20, fontWeight: FontWeight.w500),
-//   shape: const RoundedRectangleBorder(
-//     side: BorderSide(color: Colors.black),
-//   ),
-// ),
-
-  // Row(
-  //   children: [
-  //     Text(
-  //       "Availability: ",
-  //       style: Theme.of(context).textTheme.headline4,
-  //     ),
-  //     totalStock > 0
-  //         ? Row(
-  //             children: [
-  //               Text(
-  //                 "In Stock",
-  //                 style: Theme.of(context).textTheme.headline5,
-  //               ),
-  //               Text("(Hurry up only $maxItems items left)",
-  //                   style: Theme.of(context)
-  //                       .textTheme
-  //                       .headline5!
-  //                       .copyWith(color: Colors.red))
-  //             ],
-  //           )
-  //         : Text("oUT OF STOCK",
-  //             style: Theme.of(context)
-  //                 .textTheme
-  //                 .headline5!
-  //                 .copyWith(color: Colors.red))
-  //   ],
-  // ),
-
-// Visibility(
-  //   visible: product.variations.isNotEmpty,
-  //   child: Column(
-  //     children: product.variations.keys.map(
-  //       (variationId) {
-  //         Variation variation = variations
-  //             .where((element) => element.id == variationId)
-  //             .first;
-  //         return VariationSelector(
-  //             variation: Variation(
-  //                 variation.id,
-  //                 variation.createdOn,
-  //                 variation.createdBy,
-  //                 variation.lastUpdatedOn,
-  //                 variation.lastUpdatedBy,
-  //                 variation.name,
-  //                 product.variations[variationId].join(","),
-  //                 variation.type),
-  //             maxSelectCount: 1,
-  //             onChange: (s) => onVariationChange(variationId, s));
-  //       },
-  //     ).toList(),
-  //   ),
-  // ),
-
-  // if (selectedVariationsValues.isNotEmpty &&
-  //     selectedVariationsValues[0] != 0 &&
-  //     selectedVariationsValues[1] != 0) {
-  //   maxItems = 0;
-  //   int? selectedProductVariationId = widget.product.variations
-  //       .where((v) => (v.color ==
-  //               selectedVariationsValues[VariationTypes.color.index] &&
-  //           v.color == selectedVariationsValues[VariationTypes.size.index]))
-  //       .map((e) => e.id)
-  //       .first;
-  //   maxItems = widget.stock
-  //       .where((s) => s.productVariation == selectedProductVariationId)
-  //       .map((e) => e.quantity)
-  //       .first;
-
-  //   setState(() {
-  //     maxItems = maxItems;
-  //   });

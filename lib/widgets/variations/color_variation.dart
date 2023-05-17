@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_up/config/up_config.dart';
 import 'package:shop/models/attribute_value.dart';
 
 import 'package:shop/widgets/variations/variation_controller.dart';
@@ -107,10 +108,6 @@ class _ColorVariationWidgetState extends State<ColorVariationWidget> {
                       (entry) => GestureDetector(
                         onTap: () {
                           changeSelection(entry.value);
-                          // if (widget.disabledValues == null ||
-                          //     !widget.disabledValues!.contains(entry.value)) {
-                          //   changeSelection(entry.value);
-                          // }
                         },
                         child: Stack(
                           children: [
@@ -123,7 +120,7 @@ class _ColorVariationWidgetState extends State<ColorVariationWidget> {
                                   color: (widget.selectedValues ??
                                               currentSelections)
                                           .contains(entry.value)
-                                      ? Theme.of(context).primaryColor
+                                      ? UpConfig.of(context).theme.primaryColor
                                       : (widget.disabledValues != null &&
                                               widget.disabledValues!
                                                   .contains(entry.value))
@@ -143,7 +140,7 @@ class _ColorVariationWidgetState extends State<ColorVariationWidget> {
                                       color: widget.colorVariations!
                                           .firstWhere((element) =>
                                               element.id == entry.value)
-                                          .name
+                                          .colorCode!
                                           .toColor(),
                                       shape: BoxShape.circle,
                                     ),

@@ -59,9 +59,9 @@ class CustomSearchDelegate extends SearchDelegate {
           padding: const EdgeInsets.only(left: 20.0, top: 10),
           child: Row(
             children: [
-              Text(query,
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                      fontWeight: FontWeight.bold, color: Colors.black)),
+              Text(
+                query,
+              ),
             ],
           )),
     );

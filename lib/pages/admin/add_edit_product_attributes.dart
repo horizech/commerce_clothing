@@ -60,10 +60,14 @@ class _AddEditProductAttributesState extends State<AddEditProductAttributes> {
         proAttributeId:
             newProductAttribute.id != null ? newProductAttribute.id! : null);
     if (result != null && result.success) {
-      showUpToast(context: context, text: result.message ?? "");
+      if (mounted) {
+        showUpToast(context: context, text: result.message ?? "");
+      }
       getProductAttribute();
     } else if (result == null) {
-      showUpToast(context: context, text: result!.message ?? "");
+      if (mounted) {
+        showUpToast(context: context, text: result!.message ?? "");
+      }
     }
   }
 

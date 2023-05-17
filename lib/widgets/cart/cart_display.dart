@@ -64,10 +64,10 @@ class CartDisplay extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [const Text("SubTotal : "), Text("$total")],
                       ),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text("Shipment : "),
                           Text("Calculated at next step ")
                         ],
@@ -187,7 +187,7 @@ Widget _cartItemsList(BuildContext context, CartItem item) {
                             child: Text(item.product!.name,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline6!
+                                    .titleLarge!
                                     .copyWith(color: Colors.black)),
                           ),
                           Visibility(
@@ -216,17 +216,14 @@ Widget _cartItemsList(BuildContext context, CartItem item) {
                           Text("Quantity : ${item.quantity}",
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline6!
+                                  .titleLarge!
                                   .copyWith(color: Colors.black)),
                         ]),
                   ),
                   Center(
                     child: Text(
-                        "${(getPrice(product: item.product, productVariation: item.selectedVariation)) * item.quantity}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6!
-                            .copyWith(color: Colors.black)),
+                      "${(getPrice(product: item.product, productVariation: item.selectedVariation)) * item.quantity}",
+                    ),
                   ),
                 ],
               ),

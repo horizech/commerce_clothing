@@ -64,7 +64,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   final textButtonFocusNode1 = FocusNode();
 
   void _showOverlay(BuildContext context, int index) async {
-    overlayState = Overlay.of(context)!;
+    overlayState = Overlay.of(context);
 
     overlayEntry = OverlayEntry(
         maintainState: true,

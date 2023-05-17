@@ -74,9 +74,9 @@ class NavDrawer extends StatelessWidget {
       decoration: BoxDecoration(
         color: UpConfig.of(context).theme.primaryColor.shade50,
       ),
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: const [
+        children: [
           Text(
             'Shop',
             style: TextStyle(color: Colors.white, fontSize: 25),

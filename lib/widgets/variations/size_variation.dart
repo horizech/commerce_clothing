@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_up/config/up_config.dart';
 import 'package:shop/models/attribute_value.dart';
 import 'package:shop/widgets/variations/variation_controller.dart';
 import 'package:shop/widgets/variations/variation_selection_mode.dart';
@@ -110,8 +111,6 @@ class _SizeVariationWidgetState extends State<SizeVariationWidget> {
                             // }
                           },
                           child: Container(
-                            height: 30,
-                            width: 30,
                             padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -123,14 +122,16 @@ class _SizeVariationWidgetState extends State<SizeVariationWidget> {
                                                 widget.disabledValues!
                                                     .contains(entry.value))
                                             ? Colors.grey
-                                            : Colors.black,
+                                            : UpConfig.of(context)
+                                                .theme
+                                                .primaryColor,
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(5),
                               color:
                                   (widget.selectedValues ?? currentSelections)
                                           .contains(entry.value)
-                                      ? Theme.of(context).primaryColor
+                                      ? UpConfig.of(context).theme.primaryColor
                                       : (widget.disabledValues != null &&
                                               widget.disabledValues!
                                                   .contains(entry.value))
@@ -138,22 +139,31 @@ class _SizeVariationWidgetState extends State<SizeVariationWidget> {
                                           : Colors.transparent,
                               shape: BoxShape.rectangle,
                             ),
-                            child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                  widget.sizeVariations!
-                                      .firstWhere((element) =>
-                                          element.id == entry.value)
-                                      .name,
-                                  style: (widget.selectedValues ??
-                                              currentSelections)
-                                          .contains(entry.value)
-                                      ? const TextStyle(fontSize: 12)
-                                      : (widget.disabledValues != null &&
-                                              widget.disabledValues!
-                                                  .contains(entry.value))
-                                          ? const TextStyle(
-                                              fontSize: 12, color: Colors.grey)
-                                          : const TextStyle(fontSize: 12)),
+                                widget.sizeVariations!
+                                    .firstWhere(
+                                        (element) => element.id == entry.value)
+                                    .name,
+                                style:
+                                    (widget.selectedValues ?? currentSelections)
+                                            .contains(entry.value)
+                                        ? const TextStyle(
+                                            fontSize: 12, color: Colors.white)
+                                        : (widget.disabledValues != null &&
+                                                widget.disabledValues!
+                                                    .contains(entry.value))
+                                            ? const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey,
+                                              )
+                                            : TextStyle(
+                                                fontSize: 12,
+                                                color: UpConfig.of(context)
+                                                    .theme
+                                                    .primaryColor),
+                              ),
                             ),
                           ),
                         ),

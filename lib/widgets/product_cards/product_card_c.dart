@@ -22,13 +22,12 @@ class ProductCardC extends StatelessWidget {
             padding: const EdgeInsets.all(12.0),
             child: Container(
                 alignment: Alignment.topCenter,
-                child: Column(
+                child: const Column(
                   children: [
-                    const FittedBox(child: Text("Name")),
+                    FittedBox(child: Text("Name")),
                     FittedBox(
                         child: Text(
                       "Description",
-                      style: Theme.of(context).textTheme.headline2,
                     )),
                   ],
                 )),

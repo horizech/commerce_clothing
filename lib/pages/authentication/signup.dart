@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:apiraiser/apiraiser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_up/validation/up_valdation.dart';
@@ -25,12 +23,12 @@ class _SignupPageState extends State<SignupPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  _gotoHome() {
-    Timer(
-        const Duration(seconds: 1),
-        () =>
-            ServiceManager<UpNavigationService>().navigateToNamed(Routes.home));
-  }
+  // _gotoHome() {
+  //   Timer(
+  //       const Duration(seconds: 1),
+  //       () =>
+  //           ServiceManager<UpNavigationService>().navigateToNamed(Routes.home));
+  // }
 
   _signup() async {
     var formState = _formKey.currentState;
@@ -50,10 +48,12 @@ class _SignupPageState extends State<SignupPage> {
         ),
       );
 
-      ServiceManager<UpDialogService>().completeDialog(
-          context: context,
-          completerId: loadingDialogCompleterId,
-          result: null);
+      if (mounted) {
+        ServiceManager<UpDialogService>().completeDialog(
+            context: context,
+            completerId: loadingDialogCompleterId,
+            result: null);
+      }
 
       _handleSignupResult(result);
     } else {

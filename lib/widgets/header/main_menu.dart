@@ -40,11 +40,13 @@ class _MainMenuState extends State<MainMenu> {
                         children: [
                           Text(
                             e.name,
-                            style:
-                                Theme.of(context).textTheme.headline1!.copyWith(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayLarge!
+                                .copyWith(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ],
                       ),
@@ -85,10 +87,11 @@ class _MainMenuState extends State<MainMenu> {
                       },
                       child: Text(
                         e.name,
-                        style: Theme.of(context).textTheme.headline1!.copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.displayLarge!.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                ),
                       ),
                     ))
                 .toList()
@@ -163,7 +166,7 @@ class _MainMenuState extends State<MainMenu> {
 
   void _showOverlay(
       BuildContext context, CollectionTree tree, int index) async {
-    overlayState = Overlay.of(context)!;
+    overlayState = Overlay.of(context);
 
     overlayEntry = OverlayEntry(
         maintainState: true,

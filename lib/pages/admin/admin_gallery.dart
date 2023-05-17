@@ -69,10 +69,12 @@ class _AdminGalleryState extends State<AdminGallery> {
           data: Gallery.toJson(gallery),
           galleryId: selectedGallery.id != -1 ? selectedGallery.id! : null);
       if (result != null) {
-        showUpToast(
-          context: context,
-          text: result.message ?? "",
-        );
+        if (mounted) {
+          showUpToast(
+            context: context,
+            text: result.message ?? "",
+          );
+        }
         if (selectedGallery.id == -1) {
           selectedMediaList.clear();
           nameController.text = "";
@@ -80,10 +82,12 @@ class _AdminGalleryState extends State<AdminGallery> {
 
         getAllGallery();
       } else {
-        showUpToast(
-          context: context,
-          text: "An Error Occurred",
-        );
+        if (mounted) {
+          showUpToast(
+            context: context,
+            text: "An Error Occurred",
+          );
+        }
       }
     } else {
       showUpToast(context: context, text: "Please enter all fields");
@@ -102,16 +106,20 @@ class _AdminGalleryState extends State<AdminGallery> {
         APIResult? result =
             await AddEditProductService.deleteGallery(galleryId);
         if (result != null && result.success) {
-          showUpToast(context: context, text: result.message ?? "");
+          if (mounted) {
+            showUpToast(context: context, text: result.message ?? "");
+          }
           selectedGallery = const Gallery(name: "", mediaList: [], id: -1);
           nameController.text = "";
           selectedMediaList.clear();
           getAllGallery();
         } else {
-          showUpToast(
-            context: context,
-            text: "An Error Occurred",
-          );
+          if (mounted) {
+            showUpToast(
+              context: context,
+              text: "An Error Occurred",
+            );
+          }
         }
       }
     });

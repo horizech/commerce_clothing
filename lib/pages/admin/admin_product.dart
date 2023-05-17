@@ -182,23 +182,29 @@ class _AdminProductState extends State<AdminProduct> {
                 : result.data);
         if (currentProduct != null && currentProduct!.id != null) {
           isProductDetailEnabled = true;
+          if (mounted) {
+            showUpToast(
+              context: context,
+              text: result.message ?? "",
+            );
+          }
+          setState(() {});
+        }
+      } else {
+        if (mounted) {
           showUpToast(
             context: context,
             text: result.message ?? "",
           );
-          setState(() {});
         }
-      } else {
-        showUpToast(
-          context: context,
-          text: result.message ?? "",
-        );
       }
     } else {
-      showUpToast(
-        context: context,
-        text: "An error occurred",
-      );
+      if (mounted) {
+        showUpToast(
+          context: context,
+          text: "An error occurred",
+        );
+      }
     }
   }
 
