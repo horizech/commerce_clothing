@@ -11,6 +11,8 @@ class Routes {
   static const String adminProducts = '/admin/products';
   static const String adminCombos = '/admin/combos';
   static const String admin = '/admin';
+  static const String adminMedia = '/admin/media';
+
   static const String adminKeywords = '/admin/keywords';
   static const String adminAttributes = '/admin/attributes';
   static const String adminProductVariations = '/admin/product_variations';
@@ -32,4 +34,5 @@ class Constant {
   static const String productVariations = "Product Variations";
   static const String gallery = "Gallery";
   static const String keywords = "Keywords";
+  static const String media = "Media";
 }

@@ -53,6 +53,7 @@ dependencies:
   expandable_tree_menu: ^0.1.0-dev.5
   url_strategy: ^0.2.0
   apiraiser: ^0.2.3
+  image_picker: ^0.8.7+5
   # flutter_up: ^2.0.3
   flutter_up:
     path: ../flutter_up

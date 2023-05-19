@@ -13,6 +13,7 @@ import 'package:shop/pages/admin/admin_combos.dart';
 import 'package:shop/pages/admin/admin_gallery.dart';
 import 'package:shop/pages/admin/admin_keywords.dart';
 import 'package:shop/pages/admin/admin_attributes.dart';
+import 'package:shop/pages/admin/admin_media.dart';
 import 'package:shop/pages/admin/admin_products.dart';
 import 'package:shop/pages/authentication/loginsignup.dart';
 import 'package:shop/pages/cart/cart.dart';
@@ -80,6 +81,16 @@ class ShopApp extends StatelessWidget {
                   pageBuilder: (BuildContext context, UpRouterState state) =>
                       const StoreDependantPage(
                     page: Admin(),
+                  ),
+                  shouldRedirect: () => !Apiraiser.authentication.isSignedIn(),
+                  redirectRoute: Routes.loginSignup,
+                ),
+                UpRoute(
+                  path: Routes.adminMedia,
+                  name: Routes.adminMedia,
+                  pageBuilder: (BuildContext context, UpRouterState state) =>
+                      const StoreDependantPage(
+                    page: AdminMedia(),
                   ),
                   shouldRedirect: () => !Apiraiser.authentication.isSignedIn(),
                   redirectRoute: Routes.loginSignup,
