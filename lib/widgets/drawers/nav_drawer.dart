@@ -36,6 +36,10 @@ class NavDrawer extends StatelessWidget {
           .navigateToNamed(Routes.adminKeywords);
     }
 
+    void media(context) {
+      ServiceManager<UpNavigationService>().navigateToNamed(Routes.adminMedia);
+    }
+
     actions = [
       ...actions,
       UpDrawerItem(
@@ -62,6 +66,11 @@ class NavDrawer extends StatelessWidget {
         title: Constant.keywords,
         icon: Icons.folder_special,
         onTap: keywords,
+      ),
+      UpDrawerItem(
+        title: Constant.media,
+        icon: Icons.image,
+        onTap: media,
       ),
     ];
 

@@ -6,7 +6,6 @@ import 'package:flutter_up/enums/text_style.dart';
 import 'package:flutter_up/helpers/up_toast.dart';
 import 'package:flutter_up/models/up_label_value.dart';
 import 'package:flutter_up/themes/up_style.dart';
-import 'package:flutter_up/widgets/up_app_bar.dart';
 import 'package:flutter_up/widgets/up_button.dart';
 import 'package:flutter_up/widgets/up_circualar_progress.dart';
 import 'package:flutter_up/widgets/up_dropdown.dart';
@@ -23,6 +22,7 @@ import 'package:shop/models/product.dart';
 import 'package:shop/services/add_edit_product_service/add_edit_product_service.dart';
 import 'package:shop/services/products_service.dart';
 import 'package:shop/widgets/add_media_widget.dart';
+import 'package:shop/widgets/appbar/admin_appbar.dart';
 import 'package:shop/widgets/drawers/nav_drawer.dart';
 import 'package:shop/widgets/store/store_cubit.dart';
 import 'package:shop/widgets/unauthorized_widget.dart';
@@ -60,12 +60,12 @@ class _AdminProductsState extends State<AdminProducts> {
   }
 
   Widget leftSide() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Container(
-        color: Colors.grey[200],
-        width: 300,
-        height: MediaQuery.of(context).size.height,
+    return Container(
+      color: Colors.grey[200],
+      width: 300,
+      height: 900,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Column(
           children: [
             GestureDetector(
@@ -548,7 +548,7 @@ class _AdminProductsState extends State<AdminProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const UpAppBar(),
+      appBar: const AdminAppbar(),
       drawer: const NavDrawer(),
       body: isUserAdmin()
           ? BlocConsumer<StoreCubit, StoreState>(
