@@ -54,9 +54,9 @@ dependencies:
   url_strategy: ^0.2.0
   apiraiser: ^0.2.3
   image_picker: ^0.8.7+5
-  # flutter_up: ^2.0.3
-  flutter_up:
-    path: ../flutter_up
+  flutter_up: ^2.0.4
+  # flutter_up:
+  #   path: ../flutter_up
 
 dev_dependencies:
   flutter_test:
