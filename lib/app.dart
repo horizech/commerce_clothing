@@ -19,6 +19,7 @@ import 'package:shop/pages/admin/admin_keywords.dart';
 import 'package:shop/pages/admin/admin_attributes.dart';
 import 'package:shop/pages/admin/admin_media.dart';
 import 'package:shop/pages/admin/admin_keywords_mob.dart';
+import 'package:shop/pages/admin/admin_media_mob.dart';
 import 'package:shop/pages/admin/admin_products.dart';
 import 'package:shop/pages/admin/admin_products_mob.dart';
 import 'package:shop/pages/authentication/loginsignup.dart';
@@ -95,8 +96,9 @@ class ShopApp extends StatelessWidget {
                   path: Routes.adminMedia,
                   name: Routes.adminMedia,
                   pageBuilder: (BuildContext context, UpRouterState state) =>
-                      const StoreDependantPage(
-                    page: AdminMedia(),
+                      const UpResponsivePage(
+                    desktopPage: AdminMedia(),
+                    mobilePage: AdminMediaMob(),
                   ),
                   shouldRedirect: () => !Apiraiser.authentication.isSignedIn(),
                   redirectRoute: Routes.loginSignup,
