@@ -90,7 +90,7 @@ class _AdminCombosState extends State<AdminCombos> {
         data: Combo.toJson(combo), comboId: c != null ? c.id! : null);
     if (result != null && result.success) {
       if (mounted) {
-        showUpToast(
+        UpToast().showToast(
           context: context,
           text: result.message ?? "",
         );
@@ -98,7 +98,7 @@ class _AdminCombosState extends State<AdminCombos> {
       getCombos();
     } else {
       if (mounted) {
-        showUpToast(
+        UpToast().showToast(
           context: context,
           text: "An Error Occurred",
         );
@@ -118,7 +118,7 @@ class _AdminCombosState extends State<AdminCombos> {
         APIResult? result = await AddEditProductService.deleteCombo(comboId);
         if (result != null && result.success) {
           if (mounted) {
-            showUpToast(context: context, text: result.message ?? "");
+            UpToast().showToast(context: context, text: result.message ?? "");
           }
           selectedCombo =
               const Combo(name: "", price: 0, id: -1, thumbnail: null);
@@ -129,7 +129,7 @@ class _AdminCombosState extends State<AdminCombos> {
           getCombos();
         } else {
           if (mounted) {
-            showUpToast(
+            UpToast().showToast(
               context: context,
               text: "An Error Occurred",
             );
@@ -149,7 +149,7 @@ class _AdminCombosState extends State<AdminCombos> {
           ProductCombo.toJson(productCombo));
       if (result != null && result.success) {
         if (mounted) {
-          showUpToast(
+          UpToast().showToast(
             context: context,
             text: result.message ?? "",
           );
@@ -158,7 +158,7 @@ class _AdminCombosState extends State<AdminCombos> {
         getProductCombos();
       } else {
         if (mounted) {
-          showUpToast(
+          UpToast().showToast(
             context: context,
             text: "An Error Occurred",
           );
@@ -246,7 +246,7 @@ class _AdminCombosState extends State<AdminCombos> {
               await AddEditProductService.deleteProductCombo(id);
           if (result != null && result.success) {
             if (mounted) {
-              showUpToast(
+              UpToast().showToast(
                 context: context,
                 text: result.message ?? "",
               );
@@ -255,7 +255,7 @@ class _AdminCombosState extends State<AdminCombos> {
             getProductCombos();
           } else {
             if (mounted) {
-              showUpToast(
+              UpToast().showToast(
                 context: context,
                 text: "An Error Occurred",
               );

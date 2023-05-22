@@ -61,12 +61,12 @@ class _AddEditProductAttributesState extends State<AddEditProductAttributes> {
             newProductAttribute.id != null ? newProductAttribute.id! : null);
     if (result != null && result.success) {
       if (mounted) {
-        showUpToast(context: context, text: result.message ?? "");
+        UpToast().showToast(context: context, text: result.message ?? "");
       }
       getProductAttribute();
     } else if (result == null) {
       if (mounted) {
-        showUpToast(context: context, text: result!.message ?? "");
+        UpToast().showToast(context: context, text: result!.message ?? "");
       }
     }
   }
@@ -144,7 +144,7 @@ class _AddEditProductAttributesState extends State<AddEditProductAttributes> {
                             ))) {
                           selectedAttributes.add(int.parse(currentAttribute));
                         } else {
-                          showUpToast(
+                          UpToast().showToast(
                               context: context,
                               text: "Product Attribute already exists");
                         }

@@ -66,11 +66,11 @@ class _AddEditFiltersWidgetState extends State<AddEditFiltersWidget> {
 
   // by api
   _getAttributes() async {
-    List<Attribute>? newProductOptions =
+    List<Attribute>? newAttributes =
         await AddEditProductService.getAttributes();
 
-    if (newProductOptions != null && newProductOptions.isNotEmpty) {
-      attributes = newProductOptions;
+    if (newAttributes != null && newAttributes.isNotEmpty) {
+      attributes = newAttributes;
       _getAttributeValues();
     } else {}
   }
@@ -115,9 +115,8 @@ class _AddEditFiltersWidgetState extends State<AddEditFiltersWidget> {
 
         return attributes.isNotEmpty
             ? SizedBox(
-                width: 500,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,7 +130,7 @@ class _AddEditFiltersWidgetState extends State<AddEditFiltersWidget> {
                           ),
                         ),
                         SizedBox(
-                          width: 100,
+                          width: 80,
                           height: 40,
                           child: UpButton(
                             colorType: UpColorType.tertiary,
@@ -152,26 +151,31 @@ class _AddEditFiltersWidgetState extends State<AddEditFiltersWidget> {
                               (element) {
                                 if (attributeValues
                                     .any((v) => v.attribute == element.id)) {
-                                  return Wrap(
-                                    alignment: WrapAlignment.center,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      AttributeDropdownWidget(
-                                        attribute: element,
-                                        attributeValues: attributeValues,
-                                        change: (value) {
-                                          newOptions["${element.id}"] =
-                                              int.parse(value);
-                                        },
-                                        initialValue: widget.options != null &&
-                                                widget.options!.isNotEmpty &&
-                                                widget.options![
-                                                        "${element.id}"] !=
-                                                    null
-                                            ? widget.options!["${element.id}"]
-                                                .toString()
-                                            : null,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                1.3,
+                                        child: AttributeDropdownWidget(
+                                          attribute: element,
+                                          attributeValues: attributeValues,
+                                          change: (value) {
+                                            newOptions["${element.id}"] =
+                                                int.parse(value);
+                                          },
+                                          initialValue: widget.options !=
+                                                      null &&
+                                                  widget.options!.isNotEmpty &&
+                                                  widget.options![
+                                                          "${element.id}"] !=
+                                                      null
+                                              ? widget.options!["${element.id}"]
+                                                  .toString()
+                                              : null,
+                                        ),
                                       ),
                                       UpButton(
                                         onPressed: () {
@@ -179,9 +183,6 @@ class _AddEditFiltersWidgetState extends State<AddEditFiltersWidget> {
                                         },
                                         type: UpButtonType.icon,
                                         child: const Icon(Icons.add),
-                                      ),
-                                      const SizedBox(
-                                        width: 20,
                                       ),
                                     ],
                                   );
@@ -192,17 +193,22 @@ class _AddEditFiltersWidgetState extends State<AddEditFiltersWidget> {
                             ).toList(),
                           )
                         : const SizedBox(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: 100,
-                        child: UpButton(
-                          onPressed: () {
-                            _addOptionsForProduct();
-                          },
-                          text: "Save",
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            width: 80,
+                            child: UpButton(
+                              onPressed: () {
+                                _addOptionsForProduct();
+                              },
+                              text: "Save",
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
@@ -274,7 +280,7 @@ class _AttributeDropdownWidgetState extends State<AttributeDropdownWidget> {
       child: Visibility(
         visible: attributeDropdown.isNotEmpty,
         child: SizedBox(
-          width: 200,
+          width: 300,
           child: UpDropDown(
             key: GlobalKey(),
             onChanged: ((value) => {

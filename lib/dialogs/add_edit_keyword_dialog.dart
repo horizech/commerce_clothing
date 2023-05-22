@@ -89,7 +89,7 @@ class _AddEditKeywordDialogState extends State<AddEditKeywordDialog> {
                         : null);
                 if (result != null) {
                   if (mounted) {
-                    showUpToast(
+                    UpToast().showToast(
                       context: context,
                       text: result.message ?? "",
                     );
@@ -102,7 +102,7 @@ class _AddEditKeywordDialogState extends State<AddEditKeywordDialog> {
                   }
                 } else {
                   if (mounted) {
-                    showUpToast(
+                    UpToast().showToast(
                       context: context,
                       text: "An Error Occurred",
                     );

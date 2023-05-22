@@ -70,7 +70,7 @@ class _AdminGalleryState extends State<AdminGallery> {
           galleryId: selectedGallery.id != -1 ? selectedGallery.id! : null);
       if (result != null) {
         if (mounted) {
-          showUpToast(
+          UpToast().showToast(
             context: context,
             text: result.message ?? "",
           );
@@ -83,14 +83,14 @@ class _AdminGalleryState extends State<AdminGallery> {
         getAllGallery();
       } else {
         if (mounted) {
-          showUpToast(
+          UpToast().showToast(
             context: context,
             text: "An Error Occurred",
           );
         }
       }
     } else {
-      showUpToast(context: context, text: "Please enter all fields");
+      UpToast().showToast(context: context, text: "Please enter all fields");
     }
   }
 
@@ -107,7 +107,7 @@ class _AdminGalleryState extends State<AdminGallery> {
             await AddEditProductService.deleteGallery(galleryId);
         if (result != null && result.success) {
           if (mounted) {
-            showUpToast(context: context, text: result.message ?? "");
+            UpToast().showToast(context: context, text: result.message ?? "");
           }
           selectedGallery = const Gallery(name: "", mediaList: [], id: -1);
           nameController.text = "";
@@ -115,7 +115,7 @@ class _AdminGalleryState extends State<AdminGallery> {
           getAllGallery();
         } else {
           if (mounted) {
-            showUpToast(
+            UpToast().showToast(
               context: context,
               text: "An Error Occurred",
             );

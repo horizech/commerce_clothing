@@ -123,7 +123,7 @@ class _AddEditAttributeDialogState extends State<AddEditAttributeDialog> {
                         );
                         if (result1 != null) {
                           if (mounted) {
-                            showUpToast(
+                            UpToast().showToast(
                               context: context,
                               text: result1.message ?? "",
                             );
@@ -134,7 +134,7 @@ class _AddEditAttributeDialogState extends State<AddEditAttributeDialog> {
                         }
                       } else {
                         if (mounted) {
-                          showUpToast(
+                          UpToast().showToast(
                             context: context,
                             text: "An error occurred",
                           );
@@ -146,7 +146,7 @@ class _AddEditAttributeDialogState extends State<AddEditAttributeDialog> {
                         }
                       }
                     } else {
-                      showUpToast(
+                      UpToast().showToast(
                         context: context,
                         text: "Attribute already exits",
                       );

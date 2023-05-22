@@ -106,7 +106,7 @@ class _AddEditAttributeValueDialogState
                 if (result != null) {
                   if (result.success) {
                     if (mounted) {
-                      showUpToast(
+                      UpToast().showToast(
                         context: context,
                         text: result.message ?? "",
                       );
@@ -119,7 +119,7 @@ class _AddEditAttributeValueDialogState
                     }
                   } else {
                     if (mounted) {
-                      showUpToast(
+                      UpToast().showToast(
                         context: context,
                         text: result.message ?? "",
                       );
@@ -132,7 +132,7 @@ class _AddEditAttributeValueDialogState
                   }
                 } else {
                   if (mounted) {
-                    showUpToast(
+                    UpToast().showToast(
                       context: context,
                       text: "An Error Occurred",
                     );
