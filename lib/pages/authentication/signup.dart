@@ -22,13 +22,13 @@ class _SignupPageState extends State<SignupPage> {
   String _username = "", _fullname = "", _email = "", _password = "";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  // _gotoHome() {
-  //   Timer(
-  //       const Duration(seconds: 1),
-  //       () =>
-  //           ServiceManager<UpNavigationService>().navigateToNamed(Routes.home));
-  // }
+// _gotoHome
+//   () {
+//     Timer(
+//         const Duration(seconds: 1),
+//         () =>
+//             ServiceManager<UpNavigationService>().navigateToNamed(Routes.home));
+//   }
 
   _signup() async {
     var formState = _formKey.currentState;
@@ -47,8 +47,7 @@ class _SignupPageState extends State<SignupPage> {
           password: _password,
         ),
       );
-
-      if (mounted) {
+      if (context.mounted) {
         ServiceManager<UpDialogService>().completeDialog(
             context: context,
             completerId: loadingDialogCompleterId,
@@ -102,7 +101,7 @@ class _SignupPageState extends State<SignupPage> {
                 children: [
                   Image.asset(
                     "clothinglogo.jpg",
-                    height: 300,
+                    height: 150,
                     width: 300,
                   ),
                   Padding(

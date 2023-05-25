@@ -39,7 +39,6 @@ class _LoginPageState extends State<LoginPage> {
 
       APIResult result = await Apiraiser.authentication
           .login(LoginRequest(email: _email, password: _password));
-
       if (context.mounted) {
         ServiceManager<UpDialogService>().completeDialog(
             context: context,
@@ -78,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Image.asset(
                   "clothinglogo.jpg",
-                  height: 300,
+                  height: 150,
                   width: 300,
                 ),
                 Padding(
