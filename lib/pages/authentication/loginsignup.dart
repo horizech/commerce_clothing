@@ -118,8 +118,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
         ? Align(
             alignment: Alignment.center,
             child: Container(
-              constraints:
-                  BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+              constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height - 76),
               // height: MediaQuery.of(context).size.height,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -129,8 +129,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             ),
           )
         : Container(
-            constraints:
-                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+            constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height - 76),
             // height: MediaQuery.of(context).size.height,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
