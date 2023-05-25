@@ -9,7 +9,7 @@ import 'package:flutter_up/helpers/up_toast.dart';
 import 'package:flutter_up/widgets/up_button.dart';
 import 'package:flutter_up/widgets/up_circualar_progress.dart';
 import 'package:flutter_up/widgets/up_text.dart';
-import 'package:shop/isUserAdmin.dart';
+import 'package:shop/is_user_admin.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:shop/models/media.dart';
@@ -46,9 +46,10 @@ class _AdminMediaState extends State<AdminMedia> {
     if (media.isNotEmpty) {
       if (message != null && message.isNotEmpty) {
         isUploading = false;
-        if(mounted){
-        UpToast().showToast(context: context, text: message);
-}      }
+        if (mounted) {
+          UpToast().showToast(context: context, text: message);
+        }
+      }
       setState(() {});
     }
   }

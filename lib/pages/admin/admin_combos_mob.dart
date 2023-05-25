@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_up/config/up_config.dart';
 import 'package:flutter_up/enums/text_style.dart';
 import 'package:flutter_up/helpers/up_toast.dart';
-import 'package:shop/isUserAdmin.dart';
+import 'package:shop/is_user_admin.dart';
 import 'package:shop/services/products_service.dart';
 import 'package:shop/widgets/add_media_widget.dart';
 import 'package:flutter_up/models/up_label_value.dart';
@@ -55,7 +55,7 @@ class _AdminCombosMobState extends State<AdminCombosMob> {
     getAllProducts();
   }
 
-   getAllProducts() async {
+  getAllProducts() async {
     products = await ProductService.getProducts([], {}, null, null, {});
     setState(() {});
   }
@@ -88,17 +88,20 @@ class _AdminCombosMobState extends State<AdminCombosMob> {
     APIResult? result = await AddEditProductService.addEditCombos(
         data: Combo.toJson(combo), comboId: c != null ? c.id! : null);
     if (result != null && result.success) {
-      if(mounted){
-      UpToast().showToast(
-        context: context,
-        text: result.message ?? "",
-      );}
+      if (mounted) {
+        UpToast().showToast(
+          context: context,
+          text: result.message ?? "",
+        );
+      }
       getCombos();
-    } else {if(mounted){
-      UpToast().showToast(
-        context: context,
-        text: "An Error Occurred",
-      );}
+    } else {
+      if (mounted) {
+        UpToast().showToast(
+          context: context,
+          text: "An Error Occurred",
+        );
+      }
     }
   }
 
@@ -112,8 +115,10 @@ class _AdminCombosMobState extends State<AdminCombosMob> {
     ).then((result) async {
       if (result == "success") {
         APIResult? result = await AddEditProductService.deleteCombo(comboId);
-        if (result != null && result.success) {if(mounted){
-          UpToast().showToast(context: context, text: result.message ?? "");}
+        if (result != null && result.success) {
+          if (mounted) {
+            UpToast().showToast(context: context, text: result.message ?? "");
+          }
           selectedCombo =
               const Combo(name: "", price: 0, id: -1, thumbnail: null);
           nameController.text = "";
@@ -121,11 +126,13 @@ class _AdminCombosMobState extends State<AdminCombosMob> {
           descriptionController.text = "";
           selectedMedia = null;
           getCombos();
-        } else {if(mounted){
-          UpToast().showToast(
-            context: context,
-            text: "An Error Occurred",
-          );}
+        } else {
+          if (mounted) {
+            UpToast().showToast(
+              context: context,
+              text: "An Error Occurred",
+            );
+          }
         }
       }
     });
@@ -140,19 +147,21 @@ class _AdminCombosMobState extends State<AdminCombosMob> {
       APIResult? result = await AddEditProductService.insertProductCombo(
           ProductCombo.toJson(productCombo));
       if (result != null && result.success) {
-        if(mounted){
-        UpToast().showToast(
-          context: context,
-          text: result.message ?? "",
-        );}
+        if (mounted) {
+          UpToast().showToast(
+            context: context,
+            text: result.message ?? "",
+          );
+        }
 
         getProductCombos();
       } else {
-        if(mounted){
-        UpToast().showToast(
-          context: context,
-          text: "An Error Occurred",
-        );}
+        if (mounted) {
+          UpToast().showToast(
+            context: context,
+            text: "An Error Occurred",
+          );
+        }
       }
     }
   }
@@ -239,18 +248,21 @@ class _AdminCombosMobState extends State<AdminCombosMob> {
           APIResult? result =
               await AddEditProductService.deleteProductCombo(id);
           if (result != null && result.success) {
-            if(mounted){
-            UpToast().showToast(
-              context: context,
-              text: result.message ?? "",
-            );}
+            if (mounted) {
+              UpToast().showToast(
+                context: context,
+                text: result.message ?? "",
+              );
+            }
 
             getProductCombos();
-          } else {if(mounted){
-            UpToast().showToast(
-              context: context,
-              text: "An Error Occurred",
-            );}
+          } else {
+            if (mounted) {
+              UpToast().showToast(
+                context: context,
+                text: "An Error Occurred",
+              );
+            }
           }
         }
       }
