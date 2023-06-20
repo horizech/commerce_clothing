@@ -36,6 +36,7 @@ class _MediaDialogState extends State<MediaDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: UpConfig.of(context).theme.baseColor,
       title: const Padding(
         padding: EdgeInsets.all(8.0),
         child: UpText(

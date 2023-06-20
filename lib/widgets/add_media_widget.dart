@@ -51,11 +51,11 @@ class _AddMediaWidgetState extends State<AddMediaWidget> {
                   text: "Select",
                   style: UpStyle(
                     buttonHoverBackgroundColor:
-                        UpConfig.of(context).theme.primaryColor[200],
+                        UpConfig.of(context).theme.primaryColor,
                     buttonBorderColor: Colors.transparent,
                     buttonHoverBorderColor: Colors.transparent,
                     buttonBackgroundColor:
-                        UpConfig.of(context).theme.primaryColor[100],
+                        UpConfig.of(context).theme.primaryColor,
                   ),
                   onPressed: () {
                     _openMediaDialog();

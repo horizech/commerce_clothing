@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_up/themes/up_style.dart';
 import 'package:flutter_up/validation/up_valdation.dart';
 import 'package:flutter_up/widgets/up_button.dart';
+import 'package:flutter_up/widgets/up_card.dart';
 import 'package:flutter_up/widgets/up_textfield.dart';
 
 import 'package:flutter_up/locator.dart';
@@ -68,11 +69,10 @@ class _LoginPageState extends State<LoginPage> {
     return Form(
       key: _formKey,
       child: Center(
-        child: SizedBox(
-          width: 400,
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: Column(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          child: UpCard(
+            body: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(

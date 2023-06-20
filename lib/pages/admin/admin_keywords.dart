@@ -4,7 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_up/config/up_config.dart';
 import 'package:flutter_up/enums/text_style.dart';
 import 'package:flutter_up/helpers/up_toast.dart';
+import 'package:flutter_up/themes/up_style.dart';
+import 'package:flutter_up/themes/up_themes.dart';
 import 'package:flutter_up/widgets/up_button.dart';
+import 'package:flutter_up/widgets/up_card.dart';
+import 'package:flutter_up/widgets/up_list_tile.dart';
+import 'package:flutter_up/widgets/up_scaffold.dart';
 import 'package:flutter_up/widgets/up_text.dart';
 import 'package:flutter_up/widgets/up_textfield.dart';
 import 'package:shop/dialogs/delete_dialog.dart';
@@ -94,49 +99,69 @@ class _AdminKeywordsState extends State<AdminKeywords> {
   }
 
   Widget leftSide() {
-    return Container(
-      color: Colors.grey[200],
-      width: 300,
-      height: 900,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            GestureDetector(
-                onTap: (() {
-                  selectedKeyword = const Keyword(name: "", id: -1);
-                  nameController.text = selectedKeyword.name;
-
-                  setState(() {});
-                }),
-                child: Container(
-                  color: selectedKeyword.id == -1
-                      ? UpConfig.of(context).theme.primaryColor[100]
-                      : Colors.transparent,
-                  child: const ListTile(
-                    title: UpText("Create a new keyword"),
-                  ),
-                )),
-            ...keywords
-                .map(
-                  (e) => GestureDetector(
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: UpCard(
+        style: UpStyle(cardWidth: 300, cardBodyPadding: false, cardRadius: 0),
+        body: Container(
+          constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height - 50),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                GestureDetector(
                     onTap: (() {
-                      selectedKeyword = e;
+                      selectedKeyword = const Keyword(name: "", id: -1);
                       nameController.text = selectedKeyword.name;
+
                       setState(() {});
                     }),
                     child: Container(
-                      color: selectedKeyword.id == e.id
-                          ? UpConfig.of(context).theme.primaryColor[100]
+                      color: selectedKeyword.id == -1
+                          ? UpConfig.of(context).theme.primaryColor
                           : Colors.transparent,
-                      child: ListTile(
-                        title: UpText(e.name),
+                      child: UpListTile(
+                        title: ("Create a new keyword"),
+                        style: UpStyle(
+                          listTileTextColor: selectedKeyword.id == -1
+                              ? UpThemes.getContrastColor(
+                                  UpConfig.of(context).theme.primaryColor)
+                              : UpConfig.of(context).theme.baseColor.shade900,
+                        ),
                       ),
-                    ),
-                  ),
-                )
-                .toList()
-          ],
+                    )),
+                ...keywords
+                    .map(
+                      (e) => GestureDetector(
+                        onTap: (() {
+                          selectedKeyword = e;
+                          nameController.text = selectedKeyword.name;
+                          setState(() {});
+                        }),
+                        child: Container(
+                          color: selectedKeyword.id == e.id
+                              ? UpConfig.of(context).theme.primaryColor
+                              : Colors.transparent,
+                          child: UpListTile(
+                            title: (e.name),
+                            style: UpStyle(
+                              listTileTextColor: selectedKeyword.id == e.id
+                                  ? UpThemes.getContrastColor(
+                                      UpConfig.of(context).theme.primaryColor)
+                                  : UpConfig.of(context)
+                                      .theme
+                                      .baseColor
+                                      .shade900,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList()
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -144,7 +169,7 @@ class _AdminKeywordsState extends State<AdminKeywords> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return UpScaffold(
       appBar: const AdminAppbar(),
       drawer: const NavDrawer(),
       body: isUserAdmin()

@@ -5,8 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_up/config/up_config.dart';
 import 'package:flutter_up/helpers/up_toast.dart';
 import 'package:flutter_up/themes/up_style.dart';
+import 'package:flutter_up/themes/up_themes.dart';
 import 'package:flutter_up/widgets/up_app_bar.dart';
+import 'package:flutter_up/widgets/up_card.dart';
 import 'package:flutter_up/widgets/up_circualar_progress.dart';
+import 'package:flutter_up/widgets/up_list_tile.dart';
+import 'package:flutter_up/widgets/up_scaffold.dart';
 import 'package:flutter_up/widgets/up_text.dart';
 import 'package:shop/is_user_admin.dart';
 import 'package:image_picker/image_picker.dart';
@@ -70,49 +74,63 @@ class _AdminMediaMobState extends State<AdminMediaMob> {
   }
 
   Widget leftSide() {
-    return Container(
-      color: Colors.grey[200],
-      width: 300,
-      height: 900,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            GestureDetector(
-                onTap: (() {
-                  selectedMedia = const Media(name: "", id: -1);
-                  nameController.text = selectedMedia.name;
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: UpCard(
+        style: UpStyle(cardWidth: 310, cardBodyPadding: false),
+        body: Container(
+          constraints:
+              BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+          child: Column(
+            children: [
+              GestureDetector(
+                  onTap: (() {
+                    selectedMedia = const Media(name: "", id: -1);
+                    nameController.text = selectedMedia.name;
 
-                  setState(() {});
-                }),
-                child: Container(
-                  color: selectedMedia.id == -1
-                      ? UpConfig.of(context).theme.primaryColor[100]
-                      : Colors.transparent,
-                  child: const ListTile(
-                    title: UpText("Create a new media"),
-                  ),
-                )),
-            ...media
-                .map(
-                  (e) => GestureDetector(
-                    onTap: (() {
-                      selectedMedia = e;
-                      nameController.text = selectedMedia.name;
-                      setState(() {});
-                    }),
-                    child: Container(
-                      color: selectedMedia.id == e.id
-                          ? UpConfig.of(context).theme.primaryColor[100]
-                          : Colors.transparent,
-                      child: ListTile(
-                        title: UpText(e.name),
+                    setState(() {});
+                  }),
+                  child: Container(
+                    color: selectedMedia.id == -1
+                        ? UpConfig.of(context).theme.primaryColor
+                        : Colors.transparent,
+                    child: UpListTile(
+                      title: ("Create a new media"),
+                      style: UpStyle(
+                        listTileTextColor: selectedMedia.id == -1
+                            ? UpThemes.getContrastColor(
+                                UpConfig.of(context).theme.primaryColor)
+                            : UpConfig.of(context).theme.baseColor.shade900,
                       ),
                     ),
-                  ),
-                )
-                .toList()
-          ],
+                  )),
+              ...media
+                  .map(
+                    (e) => GestureDetector(
+                      onTap: (() {
+                        selectedMedia = e;
+                        nameController.text = selectedMedia.name;
+                        setState(() {});
+                      }),
+                      child: Container(
+                        color: selectedMedia.id == e.id
+                            ? UpConfig.of(context).theme.primaryColor
+                            : Colors.transparent,
+                        child: UpListTile(
+                          title: (e.name),
+                          style: UpStyle(
+                            listTileTextColor: selectedMedia.id == e.id
+                                ? UpThemes.getContrastColor(
+                                    UpConfig.of(context).theme.primaryColor)
+                                : UpConfig.of(context).theme.baseColor.shade900,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList()
+            ],
+          ),
         ),
       ),
     );
@@ -120,7 +138,7 @@ class _AdminMediaMobState extends State<AdminMediaMob> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return UpScaffold(
       appBar: const UpAppBar(),
       drawer: const NavDrawer(),
       endDrawer: SafeArea(
@@ -144,9 +162,7 @@ class _AdminMediaMobState extends State<AdminMediaMob> {
                             ? "Upload Media"
                             : selectedMedia.name,
                         style: UpStyle(
-                            textSize: 24,
-                            textWeight: FontWeight.bold,
-                            textFontStyle: FontStyle.italic),
+                            textSize: 24, textFontStyle: FontStyle.italic),
                       ),
                       const SizedBox(height: 20),
                       SizedBox(
