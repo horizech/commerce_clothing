@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_up/config/up_config.dart';
+import 'package:flutter_up/themes/up_style.dart';
+import 'package:flutter_up/themes/up_themes.dart';
+import 'package:flutter_up/widgets/up_text.dart';
 import 'package:shop/models/attribute_value.dart';
 import 'package:shop/widgets/variations/variation_controller.dart';
 import 'package:shop/widgets/variations/variation_selection_mode.dart';
@@ -114,17 +117,18 @@ class _SizeVariationWidgetState extends State<SizeVariationWidget> {
                             padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color:
-                                    (widget.selectedValues ?? currentSelections)
-                                            .contains(entry.value)
-                                        ? Colors.black
-                                        : (widget.disabledValues != null &&
-                                                widget.disabledValues!
-                                                    .contains(entry.value))
-                                            ? Colors.grey
-                                            : UpConfig.of(context)
-                                                .theme
-                                                .primaryColor,
+                                color: (widget.selectedValues ??
+                                            currentSelections)
+                                        .contains(entry.value)
+                                    ? UpThemes.getContrastColor(
+                                        UpConfig.of(context).theme.baseColor)
+                                    : (widget.disabledValues != null &&
+                                            widget.disabledValues!
+                                                .contains(entry.value))
+                                        ? Colors.grey
+                                        : UpConfig.of(context)
+                                            .theme
+                                            .primaryColor,
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(5),
@@ -141,7 +145,7 @@ class _SizeVariationWidgetState extends State<SizeVariationWidget> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
+                              child: UpText(
                                 widget.sizeVariations!
                                     .firstWhere(
                                         (element) => element.id == entry.value)
@@ -149,20 +153,31 @@ class _SizeVariationWidgetState extends State<SizeVariationWidget> {
                                 style:
                                     (widget.selectedValues ?? currentSelections)
                                             .contains(entry.value)
-                                        ? const TextStyle(
-                                            fontSize: 12, color: Colors.white)
+                                        ? UpStyle(
+                                            textSize: 12,
+                                            textColor:
+                                                UpThemes.getContrastColor(
+                                                    UpConfig.of(context)
+                                                        .theme
+                                                        .baseColor))
                                         : (widget.disabledValues != null &&
                                                 widget.disabledValues!
                                                     .contains(entry.value))
-                                            ? const TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey,
+                                            ? UpStyle(
+                                                iconSize: 12,
+                                                textColor:
+                                                    UpThemes.getContrastColor(
+                                                        UpConfig.of(context)
+                                                            .theme
+                                                            .baseColor),
                                               )
-                                            : TextStyle(
-                                                fontSize: 12,
-                                                color: UpConfig.of(context)
-                                                    .theme
-                                                    .primaryColor),
+                                            : UpStyle(
+                                                iconSize: 12,
+                                                textColor:
+                                                    UpThemes.getContrastColor(
+                                                        UpConfig.of(context)
+                                                            .theme
+                                                            .baseColor)),
                               ),
                             ),
                           ),

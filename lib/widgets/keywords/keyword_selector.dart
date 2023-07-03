@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_up/config/up_config.dart';
+import 'package:flutter_up/themes/up_style.dart';
+import 'package:flutter_up/themes/up_themes.dart';
+import 'package:flutter_up/widgets/up_text.dart';
 import 'package:shop/models/keyword.dart';
 
 class KeywordSelector extends StatefulWidget {
@@ -29,20 +32,21 @@ class _KeywordSelectorState extends State<KeywordSelector> {
       child: Chip(
         labelPadding: const EdgeInsets.only(
           left: 5,
-          right: 2,
+          right: 5,
           top: 2,
           bottom: 2,
         ),
-        label: Text(
+        label: UpText(
           widget.keyword.name,
-          style: TextStyle(
-              color: widget.isSelected
-                  ? Colors.white
-                  : UpConfig.of(context).theme.primaryColor),
+          style: UpStyle(
+              textColor: widget.isSelected
+                  ? UpThemes.getContrastColor(
+                      UpConfig.of(context).theme.primaryColor)
+                  : UpConfig.of(context).theme.baseColor[900]),
         ),
         backgroundColor: widget.isSelected
             ? UpConfig.of(context).theme.primaryColor
-            : Colors.grey[100],
+            : UpConfig.of(context).theme.baseColor[200],
       ),
     );
   }

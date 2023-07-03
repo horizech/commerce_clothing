@@ -133,8 +133,8 @@ class _ColorVariationWidgetState extends State<ColorVariationWidget> {
                               child: Center(
                                 child: FractionallySizedBox(
                                   heightFactor:
-                                      0.9, // Adjust those two for the white space
-                                  widthFactor: 0.9,
+                                      1, // Adjust those two for the white space
+                                  widthFactor: 1,
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: widget.colorVariations!
@@ -150,7 +150,7 @@ class _ColorVariationWidgetState extends State<ColorVariationWidget> {
                             ),
                             if (widget.disabledValues != null &&
                                 widget.disabledValues!.contains(entry.value))
-                               Positioned(
+                              Positioned(
                                   child: Icon(
                                 Icons.close,
                                 color: UpConfig.of(context).theme.primaryColor,

@@ -1,8 +1,12 @@
 import 'package:apiraiser/apiraiser.dart';
+import 'package:flutter_up/config/up_config.dart';
 import 'package:flutter_up/locator.dart';
 import 'package:flutter_up/services/up_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_up/themes/up_style.dart';
+import 'package:flutter_up/themes/up_themes.dart';
 import 'package:flutter_up/widgets/up_app_bar.dart';
+import 'package:flutter_up/widgets/up_icon.dart';
 import 'package:shop/constants.dart';
 import 'package:shop/widgets/search/search.dart';
 
@@ -21,11 +25,12 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       title: "Shop",
       leading: width < 600
           ? IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.white,
-                size: 25,
-              ),
+              icon: UpIcon(
+                  icon: Icons.menu,
+                  style: UpStyle(
+                      iconColor: UpThemes.getContrastColor(
+                          UpConfig.of(context).theme.primaryColor),
+                      iconSize: 25)),
               onPressed: () {
                 scaffoldKey!.currentState!.openDrawer();
               },
@@ -39,7 +44,11 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
               delegate: CustomSearchDelegate(collectionId: collection),
             );
           },
-          icon: const Icon(Icons.search),
+          icon: UpIcon(
+              icon: Icons.search,
+              style: UpStyle(
+                  iconColor: UpThemes.getContrastColor(
+                      UpConfig.of(context).theme.primaryColor))),
         ),
         Visibility(
           visible: !Apiraiser.authentication.isSignedIn(),
@@ -49,7 +58,11 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                 Routes.loginSignup,
               );
             },
-            icon: const Icon(Icons.person),
+            icon: UpIcon(
+                icon: Icons.person,
+                style: UpStyle(
+                    iconColor: UpThemes.getContrastColor(
+                        UpConfig.of(context).theme.primaryColor))),
           ),
         ),
         IconButton(
@@ -58,7 +71,11 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
               Routes.cart,
             );
           },
-          icon: const Icon(Icons.shopping_bag),
+          icon: UpIcon(
+              icon: Icons.shopping_bag,
+              style: UpStyle(
+                  iconColor: UpThemes.getContrastColor(
+                      UpConfig.of(context).theme.primaryColor))),
         ),
       ],
     );

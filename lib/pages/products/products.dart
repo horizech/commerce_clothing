@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_up/config/up_config.dart';
+import 'package:flutter_up/widgets/up_card.dart';
 import 'package:flutter_up/widgets/up_orientational_column_row.dart';
 import 'package:flutter_up/widgets/up_scaffold.dart';
 import 'package:shop/models/collection.dart';
@@ -122,9 +123,8 @@ class _AllProductsState extends State<Products> {
                                   element.parent != null,
                             )
                                 ? Center(
-                                    child: Container(
-                                      color: Colors.grey[100],
-                                      child: FilterPage(
+                                    child: UpCard(
+                                      body: FilterPage(
                                         attributeValueList: attributeValueList,
                                         collection: collection,
                                         change: (v, a) => change(

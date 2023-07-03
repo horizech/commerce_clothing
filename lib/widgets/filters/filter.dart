@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_up/widgets/up_button.dart';
+import 'package:flutter_up/widgets/up_text.dart';
 import 'package:shop/models/attribute.dart';
 import 'package:shop/models/attribute_swatch.dart';
 import 'package:shop/models/attribute_value.dart';
@@ -227,8 +228,8 @@ class _VariationFilterState extends State<VariationFilter> {
               return Wrap(
                 children: [
                   widget.variations.isNotEmpty
-                      ? Text("${key.name} : ")
-                      : const Text(""),
+                      ? UpText("${key.name} : ")
+                      : const UpText(""),
                   ColorVariationWidget(
                     colorVariations: widget.variations[key],
                     onChange: (c) => onVariationChange(key.id, c),
@@ -242,8 +243,8 @@ class _VariationFilterState extends State<VariationFilter> {
               return Wrap(
                 children: [
                   widget.variations.isNotEmpty
-                      ? Text("${key.name} : ")
-                      : const Text(""),
+                      ? UpText("${key.name} : ")
+                      : const UpText(""),
                   SizeVariationWidget(
                     sizeVariations: widget.variations[key],
                     onChange: (c) => onVariationChange(key.id, c),
@@ -262,8 +263,8 @@ class _VariationFilterState extends State<VariationFilter> {
         // Wrap(
         //   children: [
         //     widget.variations.isNotEmpty
-        //         ? const Text("Sizes : ")
-        //         : const Text(""),
+        //         ? const UpText("Sizes : ")
+        //         : const UpText(""),
         //     SizeVariationWidget(
         //       sizeVariations: widget.sizeVariations,
         //       onChange: (s) => onVariationChange(VariationTypes.size.index, s),
@@ -281,32 +282,40 @@ class _VariationFilterState extends State<VariationFilter> {
         //   controller: variationControllers[VariationTypes.color.index],
         // ),
 
-        GestureDetector(
-          onTap: onReset,
-          child: Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            runAlignment: WrapAlignment.center,
-            children: [
-              const Padding(padding: EdgeInsets.all(10.0)),
-              const Icon(
-                Icons.delete_outline,
-                size: 30,
-              ),
-              Text(
-                "Clear Filters",
-                style: Theme.of(context)
-                    .textTheme
-                    .displayMedium!
-                    .copyWith(fontSize: 16),
-              ),
-            ],
-          ),
-        ),
+        // GestureDetector(
+        //   onTap: onReset,
+        //   child: const Wrap(
+        //     crossAxisAlignment: WrapCrossAlignment.center,
+        //     runAlignment: WrapAlignment.center,
+        //     children: [
+        //       Padding(padding: EdgeInsets.all(10.0)),
+        //       Icon(
+        //         Icons.delete_outline,
+        //         size: 30,
+        //       ),
+        //       UpText("Clear Filters"),
+        //     ],
+        //   ),
+        // ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: UpButton(
-            onPressed: onChange,
-            text: "Apply Filter",
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: onReset,
+                child: UpButton(
+                  onPressed: () {},
+                  text: "Clear Filters",
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              UpButton(
+                onPressed: onChange,
+                text: "Apply Filter",
+              ),
+            ],
           ),
         ),
       ],
