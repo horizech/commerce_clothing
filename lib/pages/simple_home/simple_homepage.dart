@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_up/widgets/up_scaffold.dart';
 import 'package:shop/models/collection.dart';
 import 'package:shop/widgets/appbar/custom_appbar.dart';
 import 'package:shop/widgets/drawer/drawer.dart';
@@ -17,7 +18,7 @@ class SimpleHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     List<Collection> root = [];
-    return Scaffold(
+    return UpScaffold(
         key: scaffoldKey,
         drawer: const CustomDrawer(),
         appBar: CustomAppbar(

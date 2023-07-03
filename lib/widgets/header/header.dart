@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_up/widgets/up_text.dart';
 import 'package:shop/models/collection_tree_item.dart';
 import 'package:shop/widgets/header/main_menu.dart';
 import 'package:shop/widgets/store/store_cubit.dart';
@@ -42,7 +43,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                     ? children
                         .map((e) => Column(
                               children: [
-                                Text(e.name),
+                                UpText(e.name),
                                 _getSubCategories(e.children)
                               ],
                             ))
@@ -54,7 +55,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
   Widget _getSubCategories(List<CollectionTreeItem>? children) {
     if (children != null) {
-      return Column(children: children.map((e) => Text(e.name)).toList());
+      return Column(children: children.map((e) => UpText(e.name)).toList());
     }
     return const Text("");
   }
@@ -70,35 +71,6 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         maintainState: true,
         builder: (context) {
           return widgets[index];
-          // return Positioned(
-          //     top: 0.0,
-          //     left: 0.0,
-          //     // left: index == 0
-          //     //     ? MediaQuery.of(context).size.width * 0.43
-          //     //     : MediaQuery.of(context).size.width * 0.5,
-          //     // top: MediaQuery.of(context).size.height * 0.09,
-          //     child: TextButton(
-          //       onPressed: () {},
-          //       onHover: (val) {
-          //         if (val && showOverlay) {
-          //           if (index == 0) {
-          //             textButtonFocusNode.requestFocus();
-          //           } else if (index == 1) {
-          //             textButtonFocusNode1.requestFocus();
-          //           }
-          //         } else {
-          //           if (index == 0) {
-          //             textButtonFocusNode.unfocus();
-          //           } else if (index == 1) {
-          //             textButtonFocusNode1.unfocus();
-          //           }
-          //         }
-          //       },
-          //       child: Padding(
-          //         padding: const EdgeInsets.all(0.0),
-          //         child: widgets[index],
-          //       ),
-          //     ));
         });
     overlayEntry2 = OverlayEntry(
         maintainState: true,

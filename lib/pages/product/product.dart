@@ -1,14 +1,14 @@
 import 'dart:typed_data';
-
+import 'package:flutter_up/config/up_config.dart';
 import 'package:flutter_up/locator.dart';
 import 'package:flutter_up/services/up_navigation.dart';
 import 'package:flutter_up/themes/up_style.dart';
 import 'package:flutter_up/widgets/up_circualar_progress.dart';
-
 import 'package:flutter/material.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_up/widgets/up_button.dart';
+import 'package:flutter_up/widgets/up_scaffold.dart';
 import 'package:flutter_up/widgets/up_text.dart';
 import 'package:shop/constants.dart';
 import 'package:shop/models/attribute.dart';
@@ -52,7 +52,7 @@ class ProductPage extends StatelessWidget {
 
     List<ProductVariation>? productVariations = [];
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    return Scaffold(
+    return UpScaffold(
       key: scaffoldKey,
       drawer: const CustomDrawer(),
       appBar: CustomAppbar(
@@ -384,7 +384,11 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                           const SizedBox(
                             height: 8,
                           ),
-                          const DottedLine(),
+                          DottedLine(
+                              dashColor: UpConfig.of(context)
+                                  .theme
+                                  .baseColor
+                                  .shade900),
                           const SizedBox(
                             height: 10,
                           ),
@@ -413,8 +417,8 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                       return Wrap(
                                         children: [
                                           variations.isNotEmpty
-                                              ? Text("${key.name} : ")
-                                              : const Text(""),
+                                              ? UpText("${key.name} : ")
+                                              : const UpText(""),
                                           ColorVariationWidget(
                                             selectedValues:
                                                 selectedVariations[key.id],
@@ -433,7 +437,7 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                         "button") {
                                       return Wrap(
                                         children: [
-                                          Text("${key.name} : "),
+                                          UpText("${key.name} : "),
                                           SizeVariationWidget(
                                             selectedValues:
                                                 selectedVariations[key.id],
@@ -463,9 +467,9 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                           ),
                           Row(
                             children: [
-                              const Text("Quantity:  "),
+                              const UpText("Quantity:  "),
                               maxItems == -1
-                                  ? const Text(
+                                  ? const UpText(
                                       "Please select all variations first")
                                   : maxItems > 0
                                       ? Row(
@@ -475,14 +479,11 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                               onChange: onQuantityChange,
                                               maxItems: maxItems,
                                             ),
-                                            // Text("only $maxItems Items left"),
+                                            // UpText("only $maxItems Items left"),
                                           ],
                                         )
-                                      : Text("OUT OF STOCK",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineSmall!
-                                              .copyWith(color: Colors.red))
+                                      : UpText("OUT OF STOCK",
+                                          style: UpStyle(textSize: 12))
                             ],
                           ),
                           const SizedBox(
@@ -497,7 +498,7 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                             quantity <= maxItems &&
                                             selectedVariationId != null) {
                                           SnackBar snackBar = SnackBar(
-                                            content: Text(
+                                            content: UpText(
                                                 '$quantity products added to cart'),
                                             duration:
                                                 const Duration(seconds: 3),
@@ -523,7 +524,7 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                           cubit.addToCart(item);
                                         } else {
                                           SnackBar snackBar = const SnackBar(
-                                            content: Text(
+                                            content: UpText(
                                                 'Select quantity and variations'),
                                             duration: Duration(seconds: 3),
                                           );
@@ -534,7 +535,7 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                         if (quantity > 0 &&
                                             quantity <= maxItems) {
                                           SnackBar snackBar = SnackBar(
-                                            content: Text(
+                                            content: UpText(
                                                 '$quantity products added to cart'),
                                             duration:
                                                 const Duration(seconds: 3),
@@ -550,7 +551,7 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                                           cubit.addToCart(item);
                                         } else {
                                           SnackBar snackBar = const SnackBar(
-                                            content: Text('Select quantity '),
+                                            content: UpText('Select quantity '),
                                             duration: Duration(seconds: 3),
                                           );
                                           ScaffoldMessenger.of(context)
@@ -630,7 +631,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
     widget.disabledValues;
     return Wrap(
       children: [
-        Text("${widget.attribute.name} : "),
+        UpText("${widget.attribute.name} : "),
         SizeVariationWidget(
           // selectedValues: ,
           disabledValues: widget.disabledValues[widget.attribute.id!],
@@ -645,20 +646,20 @@ class _ButtonWidgetState extends State<ButtonWidget> {
 
 Widget _productDetais(Product product, BuildContext context) {
   return ExpansionTile(
-    title: const Text("Product Details"),
+    title: const UpText("Product Details"),
     children: [
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Align(
           alignment: Alignment.topLeft,
-          child: Text("Description: ${product.description}"),
+          child: UpText("Description: ${product.description}"),
         ),
       ),
       const Padding(
         padding: EdgeInsets.all(8.0),
         child: Align(
           alignment: Alignment.topLeft,
-          child: Text("Fabric: cotton"),
+          child: UpText("Fabric: cotton"),
         ),
       ),
     ],
@@ -669,21 +670,21 @@ Widget ourServices(BuildContext context) {
   return Wrap(spacing: 10.0, children: [
     Container(
       color: Colors.white30,
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.fire_truck, size: 40),
-              Text("Shipping Charges",
-                  style: Theme.of(context).textTheme.displayLarge),
+              Icon(Icons.fire_truck, size: 40),
+              UpText(
+                "Shipping Charges",
+              )
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 40, top: 0, bottom: 10),
-            child: Text(
+            padding: EdgeInsets.only(left: 40, top: 0, bottom: 10),
+            child: UpText(
               "Flat Rs. 200 on all orders ",
-              style: Theme.of(context).textTheme.displayMedium,
             ),
           )
         ],
@@ -691,21 +692,21 @@ Widget ourServices(BuildContext context) {
     ),
     Container(
       color: Colors.white30,
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.hourglass_bottom, size: 40),
-              Text("Support 24/7",
-                  style: Theme.of(context).textTheme.displayLarge)
+              Icon(Icons.hourglass_bottom, size: 40),
+              UpText(
+                "Support 24/7",
+              )
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 40, top: 0, bottom: 10),
-            child: Text(
+            padding: EdgeInsets.only(left: 40, top: 0, bottom: 10),
+            child: UpText(
               "Contact us 24/7 hours",
-              style: Theme.of(context).textTheme.displayMedium,
             ),
           )
         ],
@@ -713,21 +714,21 @@ Widget ourServices(BuildContext context) {
     ),
     Container(
       color: Colors.white30,
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.pin_drop, size: 40),
-              Text("Track Your Order",
-                  style: Theme.of(context).textTheme.displayLarge),
+              Icon(Icons.pin_drop, size: 40),
+              UpText(
+                "Track Your Order",
+              )
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 40, top: 0, bottom: 10),
-            child: Text(
+            padding: EdgeInsets.only(left: 40, top: 0, bottom: 10),
+            child: UpText(
               "track your order for quick updates",
-              style: Theme.of(context).textTheme.displayMedium,
             ),
           )
         ],

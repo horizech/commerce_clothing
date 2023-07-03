@@ -150,10 +150,10 @@ class _ColorVariationWidgetState extends State<ColorVariationWidget> {
                             ),
                             if (widget.disabledValues != null &&
                                 widget.disabledValues!.contains(entry.value))
-                              const Positioned(
+                               Positioned(
                                   child: Icon(
                                 Icons.close,
-                                color: Colors.red,
+                                color: UpConfig.of(context).theme.primaryColor,
                                 size: 30,
                               ))
                           ],

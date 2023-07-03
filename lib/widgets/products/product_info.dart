@@ -2,6 +2,9 @@ import 'package:flutter_up/locator.dart';
 import 'package:flutter_up/services/up_navigation.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_up/themes/up_style.dart';
+import 'package:flutter_up/widgets/up_card.dart';
+import 'package:flutter_up/widgets/up_text.dart';
 import 'package:shop/constants.dart';
 import 'package:shop/models/product.dart';
 import 'package:shop/widgets/media/media_widget.dart';
@@ -33,12 +36,10 @@ Widget getWebInfo(BuildContext context, Product product, int? collection) {
           queryParams: {'productId': '${product.id}'},
         );
       },
-      child: Container(
-        height: 150,
-        width: 1000,
-        decoration:
-            BoxDecoration(border: Border.all(width: 2, color: Colors.black)),
-        child: Row(
+      child: UpCard(
+        style:
+            UpStyle(cardHeight: 150, cardWidth: 1000, cardBodyPadding: false),
+        body: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -60,15 +61,17 @@ Widget getWebInfo(BuildContext context, Product product, int? collection) {
             ),
             Expanded(
                 child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(
+                  left: 8.0, right: 8, top: 16, bottom: 8),
               child: SizedBox(
                 // color: Colors.yellow[400],
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    UpText(
                       product.name,
                     ),
+                    const SizedBox(height: 2),
                     PriceWidget(
                       price: product.price,
                       discountPrice: product.discounPrice,

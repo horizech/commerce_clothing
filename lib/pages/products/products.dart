@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_up/config/up_config.dart';
 import 'package:flutter_up/widgets/up_orientational_column_row.dart';
+import 'package:flutter_up/widgets/up_scaffold.dart';
 import 'package:shop/models/collection.dart';
 import 'package:shop/models/product.dart';
 import 'package:shop/widgets/appbar/custom_appbar.dart';
@@ -65,7 +67,7 @@ class _AllProductsState extends State<Products> {
     }
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    return Scaffold(
+    return UpScaffold(
       key: scaffoldKey,
       drawer: const CustomDrawer(),
       appBar: CustomAppbar(
@@ -175,7 +177,10 @@ class _AllProductsState extends State<Products> {
                                                 height: 150,
                                                 width: 1000,
                                                 child: Container(
-                                                    color: Colors.grey[200]),
+                                                    color: UpConfig.of(context)
+                                                        .theme
+                                                        .baseColor
+                                                        .shade200),
                                               ),
                                             );
                                           },

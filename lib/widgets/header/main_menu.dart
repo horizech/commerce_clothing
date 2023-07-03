@@ -1,8 +1,10 @@
+import 'package:flutter_up/config/up_config.dart';
 import 'package:flutter_up/locator.dart';
 import 'package:flutter_up/services/up_navigation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_up/widgets/up_text.dart';
 import 'package:shop/constants.dart';
 import 'package:shop/models/collection_tree.dart';
 import 'package:shop/models/collection_tree_item.dart';
@@ -34,19 +36,11 @@ class _MainMenuState extends State<MainMenu> {
                 children: [
                   Container(
                     margin: const EdgeInsets.fromLTRB(16, 16, 0, 0),
-                    // color: Colors.grey[200],
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Text(
+                          UpText(
                             e.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayLarge!
-                                .copyWith(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
                           ),
                         ],
                       ),
@@ -85,13 +79,8 @@ class _MainMenuState extends State<MainMenu> {
 
                         // print('Clicked');
                       },
-                      child: Text(
+                      child: UpText(
                         e.name,
-                        style:
-                            Theme.of(context).textTheme.displayLarge!.copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                ),
                       ),
                     ))
                 .toList()
@@ -145,7 +134,7 @@ class _MainMenuState extends State<MainMenu> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   height: 512,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: UpConfig.of(context).theme.baseColor.shade50,
                     boxShadow: const [
                       BoxShadow(
                         color: Colors.grey,
