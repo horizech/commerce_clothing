@@ -306,7 +306,11 @@ class _AdminCombosMobState extends State<AdminCombosMob> {
   @override
   Widget build(BuildContext context) {
     return UpScaffold(
-      appBar: const UpAppBar(),
+      appBar: UpAppBar(
+        style: UpStyle(
+            iconColor: UpThemes.getContrastColor(
+                UpConfig.of(context).theme.primaryColor)),
+      ),
       drawer: const NavDrawer(),
       endDrawer: SafeArea(
         child: StatefulBuilder(
@@ -531,7 +535,8 @@ class _AdminCombosMobState extends State<AdminCombosMob> {
                                                   child: Divider(
                                                     color: UpConfig.of(context)
                                                         .theme
-                                                        .baseColor.shade900,
+                                                        .baseColor
+                                                        .shade900,
                                                     thickness: 1,
                                                   ),
                                                 ),

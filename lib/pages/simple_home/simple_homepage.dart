@@ -19,7 +19,7 @@ class SimpleHomePage extends StatelessWidget {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     List<Collection> root = [];
     return UpScaffold(
-        key: scaffoldKey,
+        scaffoldKey: scaffoldKey,
         drawer: const CustomDrawer(),
         appBar: CustomAppbar(
           scaffoldKey: scaffoldKey,

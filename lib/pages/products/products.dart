@@ -69,7 +69,7 @@ class _AllProductsState extends State<Products> {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return UpScaffold(
-      key: scaffoldKey,
+      scaffoldKey: scaffoldKey,
       drawer: const CustomDrawer(),
       appBar: CustomAppbar(
         scaffoldKey: scaffoldKey,

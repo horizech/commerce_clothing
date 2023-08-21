@@ -53,7 +53,7 @@ class ProductPage extends StatelessWidget {
     List<ProductVariation>? productVariations = [];
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return UpScaffold(
-      key: scaffoldKey,
+      scaffoldKey: scaffoldKey,
       drawer: const CustomDrawer(),
       appBar: CustomAppbar(
         scaffoldKey: scaffoldKey,
@@ -378,7 +378,8 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                             alignment: Alignment.topLeft,
                             child: UpText(
                               widget.product.name,
-                              style: UpStyle(textSize: 16),
+                              style: UpStyle(
+                                  textSize: 16, textWeight: FontWeight.bold),
                             ),
                           ),
                           const SizedBox(
@@ -392,6 +393,7 @@ class _ProductDetailedInfoState extends State<ProductDetailedInfo> {
                           const SizedBox(
                             height: 10,
                           ),
+                          
                           PriceWidget(
                             price: widget.product.price,
                             discountPrice: widget.product.discounPrice,

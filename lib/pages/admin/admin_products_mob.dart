@@ -650,7 +650,11 @@ class _AdminProductsMobState extends State<AdminProductsMob> {
   @override
   Widget build(BuildContext context) {
     return UpScaffold(
-      appBar: const UpAppBar(),
+      appBar: UpAppBar(
+        style: UpStyle(
+            iconColor: UpThemes.getContrastColor(
+                UpConfig.of(context).theme.primaryColor)),
+      ),
       drawer: const NavDrawer(),
       endDrawer: SafeArea(
         child: StatefulBuilder(

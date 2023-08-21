@@ -1,13 +1,15 @@
 import 'package:flutter_up/config/up_config.dart';
 import 'package:flutter_up/locator.dart';
 import 'package:flutter_up/services/up_navigation.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_up/themes/up_style.dart';
+import 'package:flutter_up/widgets/up_orientational_column_row.dart';
 import 'package:flutter_up/widgets/up_text.dart';
 import 'package:shop/constants.dart';
 import 'package:shop/models/collection_tree.dart';
 import 'package:shop/models/collection_tree_item.dart';
+import 'package:shop/widgets/media/media_widget.dart';
 import 'package:shop/widgets/store/store_cubit.dart';
 
 class MainMenu extends StatefulWidget {
@@ -28,59 +30,112 @@ class _MainMenuState extends State<MainMenu> {
 
   getRow({int level = 0, required CollectionTree tree, required int parent}) {
     return [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: (tree.roots![parent].children ?? [])
-            .map(
-              (e) => Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(16, 16, 0, 0),
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          UpText(
-                            e.name,
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        ServiceManager<UpNavigationService>()
-                            .navigateToNamed(Routes.products, queryParams: {
-                          'collection': '${e.id}',
-                        });
-
-                        // print('Clicked');
-                      },
-                    ),
-                  ),
-                  getcolumn(e.children)
-                ],
+      UpOrientationalColumnRow(
+          widths: const [350, -1],
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SizedBox(
+                height: 350,
+                width: 300,
+                child: MediaWidget(mediaId: tree.roots![parent].media),
               ),
-            )
-            .toList(),
-      )
-    ].toList();
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Wrap(
+                direction: Axis.horizontal,
+                runAlignment: WrapAlignment.spaceBetween,
+                children: (tree.roots![parent].children ?? [])
+                    .map(
+                      (e) => SizedBox(
+                        width: 250,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                // constraints: const BoxConstraints(minWidth: 250),
+
+                                margin: const EdgeInsets.fromLTRB(0, 16, 8, 0),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: GestureDetector(
+                                    child: Column(
+                                      children: [
+                                        UpText(
+                                          style: UpStyle(
+                                            textSize: 16,
+                                            textWeight: FontWeight.bold,
+                                          ),
+                                          e.name,
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      ServiceManager<UpNavigationService>()
+                                          .navigateToNamed(Routes.products,
+                                              queryParams: {
+                                            'collection': '${e.id}',
+                                          });
+                                      removeOverlay();
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Divider(
+                                color: UpConfig.of(context)
+                                    .theme
+                                    .baseColor
+                                    .shade400,
+                                height: 2,
+                              ),
+                              Align(
+                                  alignment: Alignment.topLeft,
+                                  child: getcolumn(e.children))
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ].toList())
+    ];
   }
 
   Widget getcolumn(List<CollectionTreeItem>? collections) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 10.0),
+      padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, left: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: collections != null
             ? collections
-                .map((e) => GestureDetector(
-                      onTap: () {
-                        ServiceManager<UpNavigationService>().navigateToNamed(
-                          Routes.products,
-                          queryParams: {'collection': '${e.id}'},
-                        );
-
-                        // print('Clicked');
-                      },
-                      child: UpText(
-                        e.name,
+                .map((e) => Align(
+                      alignment: Alignment.topLeft,
+                      child: GestureDetector(
+                        onTap: () {
+                          ServiceManager<UpNavigationService>().navigateToNamed(
+                            Routes.products,
+                            queryParams: {'collection': '${e.id}'},
+                          );
+                          removeOverlay();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            style: TextStyle(
+                                color: UpConfig.of(context)
+                                    .theme
+                                    .baseColor
+                                    .shade800),
+                            e.name,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
                       ),
                     ))
                 .toList()
@@ -88,41 +143,6 @@ class _MainMenuState extends State<MainMenu> {
       ),
     );
   }
-  // getMenu(int index) {
-  //   collectionTree!.roots!
-  //                       .map(
-  //                         (e) =>
-  //                             // DropdownButton(
-  //                             //     isExpanded: true,
-  //                             //     items: const [
-  //                             //       DropdownMenuItem(child: Text("Abc")),
-  //                             //       DropdownMenuItem(child: Text("Xyz")),
-  //                             //     ],
-  //                             //     hint: const Text("Select City"),
-  //                             //     onChanged: null),
-  //                             TextButton(
-  //                           style: const ButtonStyle(),
-  //                           focusNode: rootFocusNodes[index],
-  //                           onHover: (val) {
-  //                             if (val) {
-  //                               rootFocusNodes[index].requestFocus();
-  //                               showOverlay = true;
-  //                               initializeOverLayWidgets(context, e.children);
-  //                             }
-  //                           },
-  //                           onPressed: () {},
-  //                           child: Column(
-  //                             children: [
-  //                               Text(e.name,
-  //                                   style:
-  //                                       Theme.of(context).textTheme.headline6),
-  //                             ],
-  //                           ),
-  //                         ),
-  //                       )
-  //                       .toList())
-
-  // }
 
   getWidgets(BuildContext context, CollectionTree tree, int index) => [
         Stack(
@@ -131,19 +151,24 @@ class _MainMenuState extends State<MainMenu> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: 512,
+                  width: MediaQuery.of(context).size.width,
+                  constraints: const BoxConstraints(minHeight: 400),
                   decoration: BoxDecoration(
-                    color: UpConfig.of(context).theme.baseColor.shade50,
-                    boxShadow: const [
+                    color: UpConfig.of(context).theme.baseColor,
+                    boxShadow: [
                       BoxShadow(
-                        color: Colors.grey,
+                        color: UpConfig.of(context).theme.baseColor.shade300,
                         blurRadius: 5.0,
-                        offset: Offset(0, 10),
+                        offset: const Offset(0, 10),
                         spreadRadius: 0.4,
                       ),
                     ],
-                    borderRadius: BorderRadius.circular(12),
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 2,
+                        color: UpConfig.of(context).theme.primaryColor,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -156,19 +181,13 @@ class _MainMenuState extends State<MainMenu> {
   void _showOverlay(
       BuildContext context, CollectionTree tree, int index) async {
     overlayState = Overlay.of(context);
-
     overlayEntry = OverlayEntry(
         maintainState: true,
         builder: (context) {
           return Positioned(
-            left: MediaQuery.of(context).size.width * 0.1,
-            // index == 0
-            //     ? MediaQuery.of(context).size.width * 0.43
-            //     : MediaQuery.of(context).size.width * 0.5,
             top: 112,
-            // top: MediaQuery.of(context).size.height * 0.09,
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: 512,
+            width: MediaQuery.of(context).size.width,
+            height: 400,
             child: TextButton(
               onPressed: () {},
               onHover: (val) {
@@ -182,7 +201,6 @@ class _MainMenuState extends State<MainMenu> {
             ),
           );
         });
-    // overlayState!.insert(overlayEntry!);
     overlayState!.insertAll([overlayEntry!]);
   }
 
@@ -193,18 +211,6 @@ class _MainMenuState extends State<MainMenu> {
   @override
   void initState() {
     super.initState();
-    // for (int index in [0, 1]) {
-    //   if (rootFocusNodes.length - 1 < index) {
-    //     rootFocusNodes.add(FocusNode());
-    //     rootFocusNodes[index].addListener(() {
-    //       if (rootFocusNodes[index].hasFocus) {
-    //         _showOverlay(context, index);
-    //       } else {
-    //         removeOverlay();
-    //       }
-    //     });
-    //   }
-    // }
   }
 
   @override
@@ -212,7 +218,6 @@ class _MainMenuState extends State<MainMenu> {
     return BlocConsumer<StoreCubit, StoreState>(
         listener: (context, state) {},
         builder: (context, state) {
-          // CollectionTree? collectionTree = state.collectionTree;
           rootFocusNodes.clear();
           for (int index = 0;
               index < state.collectionTree!.roots!.length;
@@ -234,48 +239,27 @@ class _MainMenuState extends State<MainMenu> {
                     .asMap()
                     .entries
                     .map((entry) => MouseRegion(
-                          // onHover: (val) {
-                          //   rootFocusNodes[entry.key].requestFocus();
-                          //   showOverlay = true;
-                          // },
+                          onEnter: (event) => {
+                            rootFocusNodes[entry.key].requestFocus(),
+                            showOverlay = true,
+                          },
+                          onExit: (event) => {
+                            rootFocusNodes[entry.key].unfocus(),
+                          },
                           child: TextButton(
                             focusNode: rootFocusNodes[entry.key],
-                            onHover: (val) {
-                              if (val) {
-                                rootFocusNodes[entry.key].requestFocus();
-                                showOverlay = true;
-                              }
-                            },
+
+                            // onHover: (val) {
+                            //   if (val) {
+                            //     rootFocusNodes[entry.key].requestFocus();
+                            //     showOverlay = true;
+                            //   }
+                            // },
                             onPressed: () {},
                             child: Text(entry.value.name),
                           ),
                         ))
-                    .toList()
-                //  [
-                //   TextButton(
-                //     focusNode: rootFocusNodes[0],
-                //     onHover: (val) {
-                //       if (val) {
-                //         rootFocusNodes[0].requestFocus();
-                //         showOverlay = true;
-                //       }
-                //     },
-                //     onPressed: () {},
-                //     child: const Text('Hover 1'),
-                //   ),
-                //   TextButton(
-                //     focusNode: rootFocusNodes[1],
-                //     onHover: (val) {
-                //       if (val) {
-                //         rootFocusNodes[1].requestFocus();
-                //         showOverlay = true;
-                //       }
-                //     },
-                //     onPressed: () {},
-                //     child: const Text('Hover 2'),
-                //   ),
-                // ],
-                ),
+                    .toList()),
           );
         });
   }

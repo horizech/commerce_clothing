@@ -1,8 +1,10 @@
 import 'package:apiraiser/apiraiser.dart';
+import 'package:flutter_up/config/up_config.dart';
 import 'package:flutter_up/locator.dart';
 import 'package:flutter_up/services/up_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_up/themes/up_style.dart';
+import 'package:flutter_up/themes/up_themes.dart';
 import 'package:flutter_up/widgets/up_app_bar.dart';
 import 'package:flutter_up/widgets/up_icon.dart';
 import 'package:flutter_up/widgets/up_text.dart';
@@ -16,6 +18,9 @@ class AdminAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return UpAppBar(
+      style: UpStyle(
+          iconColor: UpThemes.getContrastColor(
+              UpConfig.of(context).theme.primaryColor)),
       titleWidget: Row(
         children: [
           Padding(
